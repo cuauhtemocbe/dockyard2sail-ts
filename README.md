@@ -13,9 +13,9 @@ _Un boilerplate moderno y listo para producción con TypeScript, Docker y DevCon
 ---
 
 ## 🌐 Documentación
-- 🇪🇸 Español (principal)  
-- 🇬🇧 [English README](./docs/README_EN.md)
 
+- 🇪🇸 Español (principal)
+- 🇬🇧 [English README](./docs/README_EN.md)
 
 ---
 
@@ -53,6 +53,10 @@ _Un boilerplate moderno y listo para producción con TypeScript, Docker y DevCon
 ---
 
 ## 🧭 Primeros Pasos
+
+Al deployar la app deberías ver:
+
+![image](./docs/pnpm-dev-example.png)
 
 ### Requisitos previos
 
