@@ -32,11 +32,9 @@ WORKDIR /app
 
 # Copy built application
 COPY --from=builder --chown=nodeuser:nodeuser /app/dist ./dist
-COPY --from=builder --chown=nodeuser:nodeuser /app/package.json ./
-COPY --from=builder --chown=nodeuser:nodeuser /app/pnpm-lock.yaml ./
 
-# Install only production dependencies
-RUN pnpm install --prod --frozen-lockfile --ignore-scripts
+# Install a simple HTTP server
+RUN pnpm add -g serve
 
 USER nodeuser
 
@@ -46,4 +44,4 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:8080/ || exit 1
 
-CMD ["node", "dist/main.js"]
+CMD ["serve", "-s", "dist", "-l", "8080"]
