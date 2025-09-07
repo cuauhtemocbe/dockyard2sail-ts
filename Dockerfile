@@ -36,7 +36,7 @@ COPY --from=builder --chown=nodeuser:nodeuser /app/package.json ./
 COPY --from=builder --chown=nodeuser:nodeuser /app/pnpm-lock.yaml ./
 
 # Install only production dependencies
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --prod --frozen-lockfile --ignore-scripts
 
 USER nodeuser
 
