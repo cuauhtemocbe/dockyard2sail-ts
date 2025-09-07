@@ -33,6 +33,7 @@ WORKDIR /app
 # Copy built application
 COPY --from=builder --chown=nodeuser:nodeuser /app/dist ./dist
 COPY --from=builder --chown=nodeuser:nodeuser /app/package.json ./
+COPY --from=builder --chown=nodeuser:nodeuser /app/pnpm-lock.yaml ./
 
 # Install only production dependencies
 RUN pnpm install --prod --frozen-lockfile
