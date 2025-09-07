@@ -6,6 +6,10 @@ RUN apk add --no-cache git bash wget curl
 # Create pnpm store directory with proper permissions before switching users
 RUN mkdir -p /home/node/.pnpm-store && chown -R node:node /home/node/.pnpm-store
 
+# Copy scripts and make them executable
+COPY scripts/ /app/scripts/
+RUN chmod +x /app/scripts/validate.sh
+
 # Switch to node user early
 USER node
 WORKDIR /home/node
