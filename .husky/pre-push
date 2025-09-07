@@ -1,0 +1,29 @@
+#!/bin/sh
+
+echo "🚀 Running pre-push validation..."
+
+# Check if pushing to main or develop branch
+protected_branch='main|develop'
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+if echo "$current_branch" | grep -qE "^($protected_branch)$"; then
+    echo "🛡️  Pushing to protected branch: $current_branch"
+    
+    # Run full validation
+    if ! ./scripts/validate.sh; then
+        echo "❌ Pre-push validation failed"
+        exit 1
+    fi
+    
+    echo "✅ Pre-push validation passed"
+else
+    echo "📝 Pushing to feature branch: $current_branch (basic checks only)"
+    
+    # Run basic type checking for feature branches
+    if ! pnpm run typecheck; then
+        echo "❌ TypeScript type checking failed"
+        exit 1
+    fi
+    
+    echo "✅ Basic pre-push validation passed"
+fi

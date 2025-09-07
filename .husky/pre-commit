@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Skip validations on regular commits for faster development
+echo "⚡ Skipping validations on regular commit (validations run on merge only)"
+exit 0

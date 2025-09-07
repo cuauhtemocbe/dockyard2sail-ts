@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TypeScript Template</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      #app {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        min-width: 300px;
+        max-width: 600px;
+        margin: 2rem;
+      }
+      
+      @media (max-width: 768px) {
+        #app {
+          margin: 1rem;
+          min-width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div style="padding: 2rem; text-align: center;">
+        <h1 style="color: #333; margin-bottom: 0.5rem;">🚀 TypeScript Template</h1>
+        <p style="color: #666; margin-bottom: 2rem;">Loading application...</p>
+        <div style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+      </div>
+    </div>
+    Make validation script executable
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+    
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

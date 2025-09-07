@@ -1,0 +1,23 @@
+FROM node:20-alpine
+
+# Install system dependencies
+RUN apk add --no-cache git bash wget curl
+
+# Create pnpm store directory with proper permissions before switching users
+RUN mkdir -p /home/node/.pnpm-store && chown -R node:node /home/node/.pnpm-store
+
+# Switch to node user early
+USER node
+WORKDIR /home/node
+
+# Install pnpm for the node user
+RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.profile" SHELL="$(which sh)" sh -
+
+# Add pnpm to PATH for the node user
+ENV PATH="/home/node/.local/share/pnpm:$PATH"
+
+# Set the working directory
+WORKDIR /app
+
+# Keep container running
+CMD ["sleep", "infinity"]

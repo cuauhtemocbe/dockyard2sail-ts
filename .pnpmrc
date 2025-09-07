@@ -1,0 +1,20 @@
+# CI/CD optimized configuration
+# Let pnpm use default store location for better caching
+
+# Enable strict peer dependencies checking in production
+strict-peer-dependencies=false
+
+# Auto-install peer dependencies
+auto-install-peers=true
+
+# Use faster node-modules linker for development
+node-linker=isolated
+
+# Enable shamefully-hoist for better compatibility
+shamefully-hoist=false
+
+# Performance optimization
+prefer-frozen-lockfile=true
+
+# Enable workspace support
+enable-pre-post-scripts=true

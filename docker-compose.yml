@@ -1,0 +1,22 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: typescript-template:dev
+    volumes:
+      - .:/app
+      - pnpm-store:/home/node/.pnpm-store
+    working_dir: /app
+    command: sleep infinity
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      - PATH=/home/node/.local/share/pnpm:$PATH
+    user: node
+    stdin_open: true
+    tty: true
+
+volumes:
+  pnpm-store:

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+echo "🔍 Running pre-merge validations..."
+
+# Check if we're merging into main branch
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$current_branch" = "main" ]; then
+    echo "🛡️  Running full validation on merge to main..."
+    
+    # Run validation script
+    if ! ./scripts/validate.sh; then
+        echo "❌ Pre-merge validation failed"
+        exit 1
+    fi
+    
+    echo "✅ Pre-merge validation passed"
+else
+    echo "📝 Running basic checks on feature branch merge..."
+    
+    # Run type checking only for feature branches
+    if ! pnpm run typecheck; then
+        echo "❌ TypeScript type checking failed"
+        exit 1
+    fi
+    
+    echo "✅ Basic validation passed"
+fi
