@@ -5,13 +5,13 @@ describe("Main module", () => {
   it("should greet user correctly", () => {
     const result = greetUser("Test User");
     expect(result).toBe(
-      "Hello, Test User! Welcome to the TypeScript boilerplate."
+      "Hola, Test User! Bienvenido a la plantilla de TypeScript."
     );
   });
 
   it("should greet user with empty string", () => {
     const result = greetUser("");
-    expect(result).toBe("Hello, ! Welcome to the TypeScript boilerplate.");
+    expect(result).toBe("Hola, ! Bienvenido a la plantilla de TypeScript.");
   });
 
   it("should fetch data successfully", async () => {
