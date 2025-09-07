@@ -1,318 +1,179 @@
 # ⚓ dockyard2sail-ts 🚢
 
-_A production-ready TypeScript + Docker + DevContainers template_
+_Un boilerplate moderno y listo para producción con TypeScript, Docker y DevContainers._
+
+---
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
 ![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-lightgrey?logo=githubactions&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Production Ready](https://img.shields.io/badge/Ready_to-Sail_🌊-blue)
+![Licencia](https://img.shields.io/badge/license-MIT-green)
+![Producción Lista](https://img.shields.io/badge/Listo_para-Navegar_🌊-blue)
 
 ---
 
-## 🌊 Features
+## 🌐 Documentación
+- 🇪🇸 Español (principal)  
+- 🇬🇧 [English README](./docs/README_EN.md)
 
-- **TypeScript**: Full TypeScript support with strict type checking
-- **pnpm**: Fast, efficient package manager with workspace support
-- **Vite**: Lightning-fast build tool and dev server
-- **Vitest**: Fast unit testing framework
-- **Docker**: Multi-stage production builds and development containers
-- **DevContainers**: Complete VS Code development environment
-- **Husky**: Git hooks for code quality assurance
-- **CI/CD Ready**: Validation scripts and GitHub Actions support
 
 ---
 
-## 🛳️ Project Structure
+## 🌊 Características
+
+- **TypeScript**: Soporte completo con chequeo estricto de tipos
+- **pnpm**: Gestor de paquetes rápido y eficiente con soporte para workspaces
+- **Vite**: Herramienta de construcción y servidor de desarrollo ultrarrápido
+- **Vitest**: Framework de pruebas unitarias veloz
+- **Docker**: Builds multi-stage para producción y contenedores de desarrollo
+- **DevContainers**: Entorno completo de desarrollo con VS Code
+- **Husky**: Hooks de Git para asegurar calidad de código
+- **CI/CD Listo**: Scripts de validación e integración con GitHub Actions
+
+---
+
+## 🛳️ Estructura del Proyecto
 
 ```
-├── .devcontainer/          # VS Code DevContainer configuration
-├── .husky/                 # Git hooks
-├── scripts/                # Build and validation scripts
-├── src/                    # Source code
-│   ├── main.ts            # Main application entry point
-│   └── test/              # Test files
-├── docker-compose.yml      # Development environment
-├── Dockerfile              # Production build
-├── Dockerfile.dev          # Development environment
-├── package.json            # Dependencies and scripts
-├── tsconfig.json           # TypeScript configuration
-├── vite.config.ts          # Vite configuration
-└── vitest.config.ts        # Testing configuration
+├── .devcontainer/          # Configuración de DevContainer para VS Code
+├── .husky/                 # Hooks de Git
+├── scripts/                # Scripts de construcción y validación
+├── src/                    # Código fuente
+│   ├── main.ts            # Punto de entrada principal
+│   └── test/              # Archivos de prueba
+├── docker-compose.yml      # Entorno de desarrollo
+├── Dockerfile              # Build de producción
+├── Dockerfile.dev          # Entorno de desarrollo
+├── package.json            # Dependencias y scripts
+├── tsconfig.json           # Configuración de TypeScript
+├── vite.config.ts          # Configuración de Vite
+└── vitest.config.ts        # Configuración de pruebas
 ```
 
-➡️ [More details about Template](./docs/TEMPLATE_INFO.md)
+---
 
-## 🧭 Getting Started
+## 🧭 Primeros Pasos
 
-When you run the development server:
+### Requisitos previos
+
+- [Docker](https://www.docker.com/) y Docker Compose
+- [VS Code](https://code.visualstudio.com/) (recomendado)
+- [Extensión Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+### Opción 1: Usando DevContainers (Recomendado)
 
 ```bash
 pnpm dev
 ```
 
-You should see something like this:
-
-![pnpm dev example](./docs/pnpm-dev-example.png)
-
----
-
-### Prerequisites
-
-- [Docker](https://www.docker.com/) and Docker Compose
-- [VS Code](https://code.visualstudio.com/) (recommended)
-- [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) (for DevContainer support)
-
-### Option 1: Using DevContainers (Recommended)
-
-1. Open the project in VS Code
-2. When prompted, click "Reopen in Container" or press `F1` and select "Dev Containers: Reopen in Container"
-3. Wait for the container to build and start
-4. Run the development server:
-   ```bash
-   pnpm dev
-   ```
-
-### Option 2: Using Docker Compose
-
-1. Start the development environment:
-
-   ```bash
-   docker-compose up -d
-   ```
-
-2. Attach to the container:
-
-   ```bash
-   docker-compose exec phaser-app bash
-   ```
-
-3. Install dependencies and start development:
-   ```bash
-   pnpm install
-   pnpm dev
-   ```
-
-### Option 3: Local Development
-
-1. Install [pnpm](https://pnpm.io/):
-
-   ```bash
-   npm install -g pnpm
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pnpm install
-   ```
-
-3. Start development server:
-   ```bash
-   pnpm dev
-   ```
-
----
-
-## ⚡ Available Scripts
-
-| Script               | Description                                    |
-| -------------------- | ---------------------------------------------- |
-| `pnpm dev`           | Start development server                       |
-| `pnpm build`         | Build for production                           |
-| `pnpm typecheck`     | Run TypeScript type checking                   |
-| `pnpm test`          | Run tests in watch mode                        |
-| `pnpm test:run`      | Run tests once                                 |
-| `pnpm test:ui`       | Run tests with UI                              |
-| `pnpm test:coverage` | Run tests with coverage                        |
-| `pnpm preview`       | Preview production build                       |
-| `pnpm validate`      | Run full validation (typecheck + test + build) |
-
----
-
-## 🐳 Docker Commands
-
-### Development
+### Opción 2: Usando Docker Compose
 
 ```bash
-# Start development environment
 docker-compose up -d
+docker-compose exec phaser-app bash
+pnpm install
+pnpm dev
+```
 
-# View logs
+### Opción 3: Desarrollo Local
+
+```bash
+npm install -g pnpm
+pnpm install
+pnpm dev
+```
+
+---
+
+## ⚡ Scripts Disponibles
+
+| Script               | Descripción                                   |
+| -------------------- | --------------------------------------------- |
+| `pnpm dev`           | Inicia el servidor de desarrollo              |
+| `pnpm build`         | Construye para producción                     |
+| `pnpm typecheck`     | Revisa los tipos de TypeScript                |
+| `pnpm test`          | Ejecuta pruebas en modo watch                 |
+| `pnpm test:run`      | Ejecuta pruebas una sola vez                  |
+| `pnpm test:ui`       | Ejecuta pruebas con interfaz gráfica          |
+| `pnpm test:coverage` | Ejecuta pruebas con cobertura                 |
+| `pnpm preview`       | Previsualiza el build de producción           |
+| `pnpm validate`      | Validación completa (tipos + pruebas + build) |
+
+---
+
+## 🐳 Comandos Docker
+
+### Desarrollo
+
+```bash
+docker-compose up -d
 docker-compose logs -f
-
-# Stop environment
 docker-compose down
 ```
 
-### Production
+### Producción
 
 ```bash
-# Build production image
-docker build -t my-app:latest .
-
-# Run production container
-docker run -p 8080:8080 my-app:latest
+docker build -t mi-app:latest .
+docker run -p 8080:8080 mi-app:latest
 ```
 
 ---
 
-## 🧭 Configuration Files
+## 🧭 Archivos de Configuración
 
-### Package Manager (.npmrc, .pnpmrc)
-
-- Optimized for CI/CD environments
-- Strict peer dependency checking disabled for compatibility
-- Auto-install peer dependencies enabled
-
-### TypeScript (tsconfig.json)
-
-- Strict type checking enabled
-- Modern ES2022 target
-- Path aliases configured
-- Source maps enabled for debugging
-
-### Vite (vite.config.ts)
-
-- Hot Module Replacement (HMR)
-- Path aliases matching TypeScript config
-- Production optimizations
-
-### Testing (vitest.config.ts)
-
-- JSDOM environment for browser-like testing
-- Coverage reporting with v8
-- UI mode available
+- **TypeScript (tsconfig.json)**: Chequeo estricto, ES2022, alias de paths, source maps
+- **Vite (vite.config.ts)**: HMR, optimización para producción, alias de paths
+- **Testing (vitest.config.ts)**: Entorno JSDOM, reportes de cobertura, modo UI
+- **Package Manager (.npmrc, .pnpmrc)**: Optimizado para CI/CD
 
 ---
 
-## ⚓ Deployment
-
-### Production Build
+## ⚓ Despliegue
 
 ```bash
 pnpm build
-```
-
-The built files will be in the `dist/` directory, ready for deployment to any static hosting service.
-
-### Docker Production
-
-```bash
-# Build production image
-docker build -t my-app:latest .
-
-# Deploy to your container registry
-docker push my-registry/my-app:latest
+docker build -t mi-app:latest .
+docker push mi-registro/mi-app:latest
 ```
 
 ---
 
-## 🔍 Code Quality
+## 🔍 Calidad de Código
 
-This template includes several code quality tools:
+Incluye herramientas para asegurar la calidad:
 
-- **Husky**: Git hooks for pre-commit, pre-merge, and pre-push validation
-- **lint-staged**: Run checks only on staged files
-- **TypeScript**: Strict type checking
-- **Vitest**: Comprehensive testing framework
-
-### Git Workflow
-
-- Regular commits: Fast commits without heavy validation
-- Merge commits: Full validation (typecheck + tests + build)
-- Push to main: Complete validation suite
+- **Husky** + **lint-staged**
+- **TypeScript estricto**
+- **Vitest** para pruebas completas
 
 ---
 
-## 🛠️ Customization
+## 📜 Buenas Prácticas
 
-### Adding Dependencies
-
-```bash
-# Add runtime dependency
-pnpm add package-name
-
-# Add development dependency
-pnpm add -D package-name
-```
-
-### Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-VITE_API_URL=https://api.example.com
-VITE_APP_TITLE=My App
-```
-
-### VS Code Extensions
-
-The DevContainer includes recommended extensions:
-
-- ESLint
-- Prettier
-- TypeScript support
-- Vite support
-- Testing utilities
+1. Mantener dependencias actualizadas
+2. Escribir pruebas con buena cobertura
+3. Usar TypeScript en modo estricto
+4. Optimizar capas en Docker
+5. Usar variables de entorno con Vite
+6. Aprovechar los hooks de Git configurados
 
 ---
 
-## 📜 Best Practices
+## 🤝 Contribuir
 
-1. **Keep dependencies up to date**: Regularly update packages for security and performance
-2. **Write tests**: Maintain good test coverage for reliability
-3. **Use TypeScript strictly**: Enable strict mode for better type safety
-4. **Docker layers**: Optimize Dockerfile for better caching
-5. **Environment variables**: Use Vite's environment variable system
-6. **Git hooks**: Leverage the pre-configured git hooks for code quality
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run validation: `pnpm validate`
-5. Submit a pull request
+1. Haz un fork del repositorio
+2. Crea una rama de feature
+3. Realiza tus cambios
+4. Ejecuta `pnpm validate`
+5. Envía un Pull Request
 
 ---
 
-## 📄 License
+## 📄 Licencia
 
-This template is available under the MIT License. See the LICENSE file for more details.
-
----
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-**DevContainer won't start:**
-
-- Ensure Docker is running
-- Check Docker Compose configuration
-- Verify VS Code Dev Containers extension is installed
-
-**Build fails:**
-
-- Run `pnpm install` to ensure dependencies are installed
-- Check TypeScript errors with `pnpm typecheck`
-- Verify Node.js version compatibility
-
-**Tests not running:**
-
-- Ensure test files end with `.test.ts` or `.spec.ts`
-- Check Vitest configuration
-- Verify JSDOM is properly configured for browser-like tests
-
-**Port conflicts:**
-
-- Default dev server runs on port 5173
-- Change port in `vite.config.ts` if needed
-- Update `docker-compose.yml` port mapping accordingly
+Este proyecto está disponible bajo la licencia MIT.
 
 ---
 
-Made with ❤️ at the ⚓ **Dockyard** → ready to 🚢 **Sail**
+Hecho con ❤️ en el ⚓ **Dockyard** → listo para 🚢 **Navegar**
