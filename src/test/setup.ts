@@ -8,7 +8,7 @@
 // import { vi } from 'vitest'
 
 // Global test setup
-console.log('Test setup initialized')
+console.log("Test setup initialized");
 
 // You can add any global mocks or configurations here
 // For example:
