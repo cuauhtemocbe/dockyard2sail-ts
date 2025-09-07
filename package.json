@@ -1,7 +1,7 @@
 {
-  "name": "typescript-pnpm-docker-template",
+  "name": "typescript-pnpm-docker-boilerplate",
   "version": "1.0.0",
-  "description": "A TypeScript template with pnpm, Docker, and DevContainers support",
+  "description": "A TypeScript boilerplate with pnpm, Docker, and DevContainers support",
   "private": true,
   "type": "module",
   "main": "dist/main.js",

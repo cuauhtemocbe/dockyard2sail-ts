@@ -1,6 +1,6 @@
 # ⚓ dockyard2sail-ts 🚢
 
-_A production-ready TypeScript + Docker + DevContainers template_
+_A production-ready TypeScript + Docker + DevContainers boilerplate_
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
 ![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)
@@ -41,7 +41,7 @@ _A production-ready TypeScript + Docker + DevContainers template_
 └── vitest.config.ts        # Testing configuration
 ```
 
-➡️ [More details about Template](./docs/TEMPLATE_INFO.md)
+➡️ [More details about Boilerplate](./docs/Boilerplate_INFO.md)
 
 ## 🧭 Getting Started
 
@@ -210,7 +210,7 @@ docker push my-registry/my-app:latest
 
 ## 🔍 Code Quality
 
-This template includes several code quality tools:
+This boilerplate includes several code quality tools:
 
 - **Husky**: Git hooks for pre-commit, pre-merge, and pre-push validation
 - **lint-staged**: Run checks only on staged files
@@ -281,7 +281,7 @@ The DevContainer includes recommended extensions:
 
 ## 📄 License
 
-This template is available under the MIT License. See the LICENSE file for more details.
+This boilerplate is available under the MIT License. See the LICENSE file for more details.
 
 ---
 

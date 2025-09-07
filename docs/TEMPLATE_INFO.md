@@ -1,11 +1,11 @@
-# Template File Structure
+# Boilerplate File Structure
 
-This template includes all the necessary files for a modern TypeScript project with pnpm, Docker, and DevContainers support.
+This boilerplate includes all the necessary files for a modern TypeScript project with pnpm, Docker, and DevContainers support.
 
 ## 📁 Complete File Structure
 
 ```
-Template/
+Boilerplate/
 ├── .devcontainer/
 │   └── devcontainer.json          # VS Code DevContainer configuration
 ├── .husky/                        # Git hooks for code quality
@@ -37,7 +37,7 @@ Template/
 
 ## 🚀 Quick Start
 
-1. Copy the entire `Template/` folder to your new project location
+1. Copy the entire `Boilerplate/` folder to your new project location
 2. Rename the folder to your project name
 3. Update `package.json` with your project details:
    - Change `name` field
@@ -60,6 +60,7 @@ Template/
 ## 📋 What's Included
 
 ### Core Development
+
 - ✅ TypeScript configuration with strict mode
 - ✅ Vite for fast development and building
 - ✅ Vitest for testing with coverage
@@ -67,26 +68,30 @@ Template/
 - ✅ Path aliases configured (@/ for src/)
 
 ### Containerization
+
 - ✅ Docker development environment
 - ✅ Docker production build
 - ✅ Docker Compose for easy development
 - ✅ VS Code DevContainers support
 
 ### Code Quality
+
 - ✅ Husky git hooks
 - ✅ Lint-staged for efficient checks
 - ✅ Validation scripts
 - ✅ Example tests
 
 ### Documentation
+
 - ✅ Comprehensive README
 - ✅ Environment variables example
 - ✅ MIT License included
 - ✅ This file structure documentation
 
-## 🎯 Template Philosophy
+## 🎯 Boilerplate Philosophy
 
-This template is designed to be:
+This boilerplate is designed to be:
+
 - **Minimal but Complete**: Only essential dependencies, but all necessary tooling
 - **Modern**: Uses latest stable versions and best practices
 - **Flexible**: Easy to extend with additional libraries
@@ -95,7 +100,8 @@ This template is designed to be:
 
 ## 🛠️ Customization
 
-After copying the template:
+After copying the boilerplate:
+
 1. Update project name and description in `package.json`
 2. Modify the main application in `src/main.ts`
 3. Add your dependencies with `pnpm add`

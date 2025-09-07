@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    image: typescript-template:dev
+    image: typescript-boilerplate:dev
     volumes:
       - .:/app
       - pnpm-store:/home/node/.pnpm-store

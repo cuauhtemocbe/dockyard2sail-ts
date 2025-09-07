@@ -3,7 +3,7 @@ console.log('Hello, World! 🌍');
 
 // Simple function to demonstrate TypeScript
 function greetUser(name: string): string {
-  return `Hello, ${name}! Welcome to the TypeScript template.`;
+  return `Hola, ${name}! Bienvenido a la plantilla de TypeScript.`;
 }
 
 // Demo function with async/await
@@ -28,7 +28,7 @@ async function init(): Promise<void> {
     if (app) {
       app.innerHTML = `
         <div style="padding: 2rem; text-align: center; font-family: Arial, sans-serif;">
-          <h1 style="color: #333;">🚀 TypeScript Template</h1>
+          <h1 style="color: #333;">🚀 TypeScript Boilerplate</h1>
           <p style="color: #666;">${greeting}</p>
           <div id="status" style="margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 8px;">
             Loading...
