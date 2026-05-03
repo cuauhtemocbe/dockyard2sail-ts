@@ -15,4 +15,9 @@ export default defineConfig({
     target: 'esnext',
     outDir: 'dist',
   },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test/setup.ts'],
+  },
 })
