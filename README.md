@@ -35,7 +35,6 @@ _Un boilerplate moderno y listo para producción con TypeScript, Docker y DevCon
 ## 🛳️ Estructura del Proyecto
 
 ```
-├── .devcontainer/          # Configuración de DevContainer para VS Code
 ├── .husky/                 # Hooks de Git
 ├── scripts/                # Scripts de construcción y validación
 ├── src/                    # Código fuente

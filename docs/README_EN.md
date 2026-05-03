@@ -26,7 +26,6 @@ _A production-ready TypeScript + Docker + DevContainers boilerplate_
 ## 🛳️ Project Structure
 
 ```
-├── .devcontainer/          # VS Code DevContainer configuration
 ├── .husky/                 # Git hooks
 ├── scripts/                # Build and validation scripts
 ├── src/                    # Source code

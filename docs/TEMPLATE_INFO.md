@@ -1,13 +1,11 @@
 # Boilerplate File Structure
 
-This boilerplate includes all the necessary files for a modern TypeScript project with pnpm, Docker, and DevContainers support.
+This boilerplate includes all the necessary files for a modern TypeScript project with pnpm and Docker.
 
 ## 📁 Complete File Structure
 
 ```
 Boilerplate/
-├── .devcontainer/
-│   └── devcontainer.json          # VS Code DevContainer configuration
 ├── .husky/                        # Git hooks for code quality
 │   ├── pre-commit                 # Fast commit hook (validation disabled)
 │   ├── pre-merge-commit          # Full validation on merge
@@ -43,15 +41,13 @@ Boilerplate/
    - Change `name` field
    - Update `description`
    - Modify `version` if needed
-4. Open in VS Code and use "Reopen in Container" for DevContainer support
-5. Run `pnpm dev` to start development
+4. Run `pnpm dev` to start development
 
 ## 🔧 Key Features
 
 - **TypeScript**: Strict type checking enabled
 - **pnpm**: Fast package manager with proper configuration
 - **Docker**: Multi-stage builds for development and production
-- **DevContainers**: Complete VS Code development environment
 - **Vite**: Fast build tool and dev server
 - **Vitest**: Modern testing framework
 - **Husky**: Git hooks for code quality
@@ -72,7 +68,6 @@ Boilerplate/
 - ✅ Docker development environment
 - ✅ Docker production build
 - ✅ Docker Compose for easy development
-- ✅ VS Code DevContainers support
 
 ### Code Quality
 
@@ -96,7 +91,7 @@ This boilerplate is designed to be:
 - **Modern**: Uses latest stable versions and best practices
 - **Flexible**: Easy to extend with additional libraries
 - **Production Ready**: Includes proper Docker builds and validation
-- **Developer Friendly**: Great DX with DevContainers and fast tools
+- **Developer Friendly**: Great DX with fast tools
 
 ## 🛠️ Customization
 
