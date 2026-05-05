@@ -51,6 +51,20 @@ _Un boilerplate moderno y listo para producción con TypeScript, Docker y DevCon
 
 ---
 
+## 📦 ¿Por qué pnpm?
+
+Este proyecto usa **pnpm** como gestor de paquetes por las siguientes razones:
+
+- **Rápido**: Hasta 2x más rápido que npm/yarn
+- **Eficiente**: Ahorra espacio en disco con un almacenamiento compartido de paquetes
+- **Estricto**: Previene dependencias fantasma y problemas de hoisting
+- **Monorepo-friendly**: Soporte nativo para workspaces
+- **Compatible**: Funciona con el mismo `package.json` que npm
+
+> ⚠️ **Importante**: Este proyecto requiere pnpm. No usar npm o yarn.
+
+---
+
 ## 🧭 Primeros Pasos
 
 Al deployar la app deberías ver:
@@ -59,9 +73,19 @@ Al deployar la app deberías ver:
 
 ### Requisitos previos
 
+- **[pnpm](https://pnpm.io/)** (gestor de paquetes requerido)
 - [Docker](https://www.docker.com/) y Docker Compose
 - [VS Code](https://code.visualstudio.com/) (recomendado)
 - [Extensión Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+### Instalar pnpm
+
+```bash
+npm install -g pnpm
+# o con corepack (Node.js 16.13+)
+corepack enable
+corepack prepare pnpm@latest --activate
+```
 
 ### Opción 1: Usando DevContainers (Recomendado)
 
@@ -81,26 +105,34 @@ pnpm dev
 ### Opción 3: Desarrollo Local
 
 ```bash
-npm install -g pnpm
+# Instalar dependencias
 pnpm install
+
+# Iniciar servidor de desarrollo
 pnpm dev
+# o simplemente
+pnpm start
 ```
 
 ---
 
 ## ⚡ Scripts Disponibles
 
-| Script               | Descripción                                   |
-| -------------------- | --------------------------------------------- |
-| `pnpm dev`           | Inicia el servidor de desarrollo              |
-| `pnpm build`         | Construye para producción                     |
-| `pnpm typecheck`     | Revisa los tipos de TypeScript                |
-| `pnpm test`          | Ejecuta pruebas en modo watch                 |
-| `pnpm test:run`      | Ejecuta pruebas una sola vez                  |
-| `pnpm test:ui`       | Ejecuta pruebas con interfaz gráfica          |
-| `pnpm test:coverage` | Ejecuta pruebas con cobertura                 |
-| `pnpm preview`       | Previsualiza el build de producción           |
-| `pnpm validate`      | Validación completa (tipos + pruebas + build) |
+| Script                 | Descripción                                   |
+| ---------------------- | --------------------------------------------- |
+| `pnpm start`           | Alias para `pnpm dev`                         |
+| `pnpm start:dev`       | Inicia el servidor de desarrollo (Vite)       |
+| `pnpm dev`             | Inicia el servidor de desarrollo              |
+| `pnpm build`           | Construye para producción                     |
+| `pnpm typecheck`       | Revisa los tipos de TypeScript                |
+| `pnpm test`            | Ejecuta pruebas en modo watch                 |
+| `pnpm test:run`        | Ejecuta pruebas una sola vez                  |
+| `pnpm test:ui`         | Ejecuta pruebas con interfaz gráfica          |
+| `pnpm test:coverage`   | Ejecuta pruebas con cobertura                 |
+| `pnpm preview`         | Previsualiza el build de producción           |
+| `pnpm validate`        | Validación completa (tipos + pruebas + build) |
+| `pnpm clean`           | Limpia build y dependencias                   |
+| `pnpm clean:install`   | Limpia todo y reinstala dependencias          |
 
 ---
 

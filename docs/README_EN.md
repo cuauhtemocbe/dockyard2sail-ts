@@ -42,6 +42,20 @@ _A production-ready TypeScript + Docker + DevContainers boilerplate_
 
 ➡️ [More details about Boilerplate](./docs/Boilerplate_INFO.md)
 
+## 📦 Why pnpm?
+
+This project uses **pnpm** as the package manager for the following reasons:
+
+- **Fast**: Up to 2x faster than npm/yarn
+- **Efficient**: Saves disk space with shared package storage
+- **Strict**: Prevents phantom dependencies and hoisting issues
+- **Monorepo-friendly**: Native workspace support
+- **Compatible**: Works with the same `package.json` as npm
+
+> ⚠️ **Important**: This project requires pnpm. Do not use npm or yarn.
+
+---
+
 ## 🧭 Getting Started
 
 When you run the development server:
@@ -58,9 +72,19 @@ You should see something like this:
 
 ### Prerequisites
 
+- **[pnpm](https://pnpm.io/)** (required package manager)
 - [Docker](https://www.docker.com/) and Docker Compose
 - [VS Code](https://code.visualstudio.com/) (recommended)
 - [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) (for DevContainer support)
+
+### Installing pnpm
+
+```bash
+npm install -g pnpm
+# or with corepack (Node.js 16.13+)
+corepack enable
+corepack prepare pnpm@latest --activate
+```
 
 ### Option 1: Using DevContainers (Recommended)
 
@@ -94,38 +118,38 @@ You should see something like this:
 
 ### Option 3: Local Development
 
-1. Install [pnpm](https://pnpm.io/):
-
-   ```bash
-   npm install -g pnpm
-   ```
-
-2. Install dependencies:
+1. Install dependencies:
 
    ```bash
    pnpm install
    ```
 
-3. Start development server:
+2. Start development server:
    ```bash
    pnpm dev
+   # or simply
+   pnpm start
    ```
 
 ---
 
 ## ⚡ Available Scripts
 
-| Script               | Description                                    |
-| -------------------- | ---------------------------------------------- |
-| `pnpm dev`           | Start development server                       |
-| `pnpm build`         | Build for production                           |
-| `pnpm typecheck`     | Run TypeScript type checking                   |
-| `pnpm test`          | Run tests in watch mode                        |
-| `pnpm test:run`      | Run tests once                                 |
-| `pnpm test:ui`       | Run tests with UI                              |
-| `pnpm test:coverage` | Run tests with coverage                        |
-| `pnpm preview`       | Preview production build                       |
-| `pnpm validate`      | Run full validation (typecheck + test + build) |
+| Script                 | Description                                    |
+| ---------------------- | ---------------------------------------------- |
+| `pnpm start`           | Alias for `pnpm dev`                           |
+| `pnpm start:dev`       | Start development server (Vite)                |
+| `pnpm dev`             | Start development server                       |
+| `pnpm build`           | Build for production                           |
+| `pnpm typecheck`       | Run TypeScript type checking                   |
+| `pnpm test`            | Run tests in watch mode                        |
+| `pnpm test:run`        | Run tests once                                 |
+| `pnpm test:ui`         | Run tests with UI                              |
+| `pnpm test:coverage`   | Run tests with coverage                        |
+| `pnpm preview`         | Preview production build                       |
+| `pnpm validate`        | Run full validation (typecheck + test + build) |
+| `pnpm clean`           | Clean build and dependencies                   |
+| `pnpm clean:install`   | Clean everything and reinstall dependencies    |
 
 ---
 

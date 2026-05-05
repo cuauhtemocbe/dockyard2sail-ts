@@ -2,6 +2,16 @@
 node_modules/
 .pnpm-store/
 
+# Package Manager Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package Manager Lock Files (keep pnpm-lock.yaml versioned)
+package-lock.json
+yarn.lock
+
 # Build
 dist/
 *.tsbuildinfo

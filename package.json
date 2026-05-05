@@ -5,7 +5,14 @@
   "private": true,
   "type": "module",
   "main": "dist/main.js",
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
   "scripts": {
+    "start": "pnpm dev",
+    "start:dev": "vite",
     "dev": "vite",
     "build": "tsc && vite build",
     "typecheck": "tsc --noEmit",
@@ -15,7 +22,9 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "validate": "./scripts/validate.sh",
-    "prepare": "husky"
+    "prepare": "husky",
+    "clean": "rm -rf dist node_modules .pnpm-store",
+    "clean:install": "pnpm clean && pnpm install"
   },
   "dependencies": {
     "vite": "^5.4.21"
