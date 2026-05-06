@@ -158,76 +158,71 @@ async function playLoop(): Promise<void> {
 }
 
 // Initialize the application
-async function init(): Promise<void> {
-  const userName = "Developer";
-  const greeting = greetUser(userName);
+const userName = "Developer";
+const greeting = greetUser(userName);
 
-  console.log(greeting);
+console.log(greeting);
 
-  // Update DOM if we're in a browser environment
-  if (typeof document !== "undefined") {
-    const app = document.getElementById("app");
-    if (app) {
-      app.innerHTML = `
-        <div style="padding: 3rem 2rem; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; max-width: 500px; margin: 0 auto;">
-          <h1 style="color: #1a1a1a; margin-bottom: 0.5rem; font-weight: 300; font-size: 2rem; letter-spacing: -0.02em;">
-            🚀 TypeScript Boilerplate
-          </h1>
-          <p style="color: #6b7280; margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.5;">
-            ${greeting}
-          </p>
-          
-          <div style="margin: 2rem 0; color: #667eea; font-weight: 500; font-size: 1.1rem;">
-            ⚓ dockyard2sail-ts 🚢
-          </div>
-          <p style="color: #6b7280; font-size: 0.875rem; line-height: 1.6; margin: 0 0 2rem 0; max-width: 400px; margin-left: auto; margin-right: auto;">
-            Un boilerplate moderno y listo para producción con TypeScript, pnpm, Docker y DevContainers, con pipeline completo de CI/CD. Permite iniciar rápido el desarrollo local, validar con hooks de Git y desplegar fácilmente a producción.
-          </p>
-          
-          <div id="status" style="margin-top: 2rem; padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem;">
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
-              <div style="width: 16px; height: 16px; border: 2px solid #e2e8f0; border-top: 2px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-              <span style="color: #64748b;">Loading...</span>
-            </div>
+// Update DOM if we're in a browser environment
+if (typeof document === "undefined") {
+  try {
+    const data = await fetchData();
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+} else {
+  const app = document.getElementById("app");
+  if (app) {
+    app.innerHTML = `
+      <div style="padding: 3rem 2rem; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; max-width: 500px; margin: 0 auto;">
+        <h1 style="color: #1a1a1a; margin-bottom: 0.5rem; font-weight: 300; font-size: 2rem; letter-spacing: -0.02em;">
+          🚀 TypeScript Boilerplate
+        </h1>
+        <p style="color: #6b7280; margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.5;">
+          ${greeting}
+        </p>
+
+        <div style="margin: 2rem 0; color: #667eea; font-weight: 500; font-size: 1.1rem;">
+          ⚓ dockyard2sail-ts 🚢
+        </div>
+        <p style="color: #6b7280; font-size: 0.875rem; line-height: 1.6; margin: 0 0 2rem 0; max-width: 400px; margin-left: auto; margin-right: auto;">
+          Un boilerplate moderno y listo para producción con TypeScript, pnpm, Docker y DevContainers, con pipeline completo de CI/CD. Permite iniciar rápido el desarrollo local, validar con hooks de Git y desplegar fácilmente a producción.
+        </p>
+
+        <div id="status" style="margin-top: 2rem; padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem;">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <div style="width: 16px; height: 16px; border: 2px solid #e2e8f0; border-top: 2px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <span style="color: #64748b;">Loading...</span>
           </div>
         </div>
-      `;
+      </div>
+    `;
 
-      const statusEl = document.getElementById("status");
-      if (statusEl) {
-        try {
-          const data = await fetchData();
-          statusEl.innerHTML = `
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
-              <span style="color: #10b981; font-size: 1.1rem;">✅</span>
-              <span style="color: #374151; font-weight: 500;">${data}</span>
-            </div>
-          `;
+    const statusEl = document.getElementById("status");
+    if (statusEl) {
+      try {
+        const data = await fetchData();
+        statusEl.innerHTML = `
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <span style="color: #10b981; font-size: 1.1rem;">✅</span>
+            <span style="color: #374151; font-weight: 500;">${data}</span>
+          </div>
+        `;
 
-          // Add the pipeline element after successful data load
-          addPipelineElement();
-        } catch (error) {
-          statusEl.innerHTML = `
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
-              <span style="color: #ef4444; font-size: 1.1rem;">❌</span>
-              <span style="color: #374151; font-weight: 500;">Error: ${error}</span>
-            </div>
-          `;
-        }
+        // Add the pipeline element after successful data load
+        addPipelineElement();
+      } catch (error) {
+        statusEl.innerHTML = `
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <span style="color: #ef4444; font-size: 1.1rem;">❌</span>
+            <span style="color: #374151; font-weight: 500;">Error: ${error}</span>
+          </div>
+        `;
       }
-    }
-  } else {
-    try {
-      const data = await fetchData();
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
     }
   }
 }
-
-// Start the application
-init();
 
 // Export for testing
 export { greetUser, fetchData };
