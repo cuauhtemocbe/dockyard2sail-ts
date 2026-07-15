@@ -15,12 +15,16 @@ COPY . .
 RUN pnpm run typecheck && pnpm run build
 
 # ---------- Production ----------
-FROM node:22-alpine AS production
+# Pinned by digest for byte-for-byte reproducible builds (Dockerfile.dev intentionally
+# stays on the floating tag — see practices reference). Refresh with:
+#   docker pull node:22-alpine && docker inspect --format='{{index .RepoDigests 0}}' node:22-alpine
+# Dependabot (.github/dependabot.yml, docker ecosystem) keeps this from going stale automatically.
+FROM node:22-alpine@sha256:16e22a550f3863206a3f701448c45f7912c6896a62de43add43bb9c86130c3e2 AS production
 
 RUN apk add --no-cache curl
 ENV NODE_ENV=production
-ENV PNPM_HOME="/home/node/.local/share/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+ENV PNPM_HOME="/home/nodeuser/.local/share/pnpm"
+ENV PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH"
 ENV PORT=8080
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
