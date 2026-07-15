@@ -51,5 +51,13 @@ else
     echo "⚠️  Security audit found issues (continuing...)"
 fi
 
+# Documentation checks (CHANGELOG version sync, CLAUDE.md tooling exceptions)
+echo "📚 Running documentation checks..."
+if ! ./scripts/check-docs.sh; then
+    echo "❌ Documentation checks failed"
+    exit 1
+fi
+echo "✅ Documentation checks passed"
+
 echo "🎉 All validations completed successfully!"
 exit 0
