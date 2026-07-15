@@ -225,4 +225,4 @@ if (typeof document === "undefined") {
 }
 
 // Export for testing
-export { greetUser, fetchData };
+export { fetchData, greetUser };
