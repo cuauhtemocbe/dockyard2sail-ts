@@ -192,11 +192,11 @@ src/
 
 - **`Dockerfile`**: build multi-stage para producción
 - **`Dockerfile.dev`**: entorno de desarrollo (usado por DevContainers y `docker-compose.yml`)
-- **`docker-compose.yml`**: levanta el entorno de desarrollo completo
+- **`docker-compose.yml`**: levanta el entorno de desarrollo completo — el servicio `app` tiene `healthcheck` (confirma que `pnpm` está disponible), usar `--wait` para no ejecutar comandos contra un contenedor que todavía no está listo
 
 ```bash
-docker-compose up -d
-docker-compose exec phaser-app bash
+docker compose up -d --wait
+docker compose exec app bash
 ```
 
 ---
