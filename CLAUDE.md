@@ -97,7 +97,21 @@ El repo remoto es `cuauhtemocbe/dockyard2sail-ts` en GitHub. Usar el skill `/use
 
 ### Branch Protection (main)
 
-`main` tiene protección habilitada: sin force-push, sin borrado de la rama. `enforce_admins: false` — decisión deliberada, no descuido: el owner (único colaborador activo) puede seguir pusheando directo cuando hace sentido en un repo solo/bajo tráfico. No hay `required_status_checks` porque no hay CI hosteado (repo solo/bajo tráfico, validación completa se corre localmente vía `scripts/validate.sh` gateado en `pre-push` — ver sección "Git Hooks" arriba) — revisar esto si el proyecto suma colaboradores o CI.
+`main` tiene protección habilitada: sin force-push, sin borrado de la rama. `enforce_admins: false` — decisión deliberada, no descuido: el owner (único colaborador activo) puede seguir pusheando directo cuando hace sentido en un repo solo/bajo tráfico. No hay `required_status_checks` porque no hay CI hosteado — ver la sección siguiente.
+
+---
+
+## Excepciones deliberadas de tooling
+
+Este proyecto se desvía de dos prácticas estándar de forma explícita, no por omisión — documentado acá para que nadie las "corrija" sin contexto (ver referencia de prácticas, `/home/kuautli/Projects/README.md`, secciones 2 y 4).
+
+### CI/CD (GitHub Actions)
+
+No hay workflows de GitHub Actions. Para un repo solo/bajo tráfico como este, `scripts/validate.sh` gateado en `pre-push`/`pre-merge-commit` hacia `main`/`develop` (ver "Git Hooks" arriba) cumple el mismo objetivo — nada roto llega a `main` — sin mantener YAML de CI para un único colaborador. Migrar a Actions en cuanto el repo sume colaboradores activos o pase a producción con usuarios reales.
+
+### Makefile
+
+No hay `Makefile`. Los scripts de `pnpm` (`package.json`) más `scripts/validate.sh` ya son la interfaz única de comandos del proyecto a este tamaño — un `Makefile` envolviendo esos mismos comandos sería una capa redundante. Reconsiderar si el proyecto crece lo suficiente como para necesitar orquestación que `pnpm`/Docker Compose no cubran directamente.
 
 ---
 
