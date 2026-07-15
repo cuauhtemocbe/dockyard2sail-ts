@@ -13,10 +13,22 @@ services:
       - "5173:5173"
     environment:
       - NODE_ENV=development
-      - PATH=/home/node/.local/share/pnpm:$PATH
     user: node
     stdin_open: true
     tty: true
+    healthcheck:
+      # The dev container just sleeps (devs exec into it) — "healthy" here
+      # means pnpm is installed and reachable, not that a server is up.
+      # `command -v` (PATH lookup only) instead of `pnpm --version`: the
+      # latter runs from /app, whose package.json pins a "packageManager"
+      # version, triggering pnpm's auto-install-matching-version feature
+      # (a real network call) on every healthcheck tick — unnecessary and
+      # can flake on restricted networks.
+      test: ["CMD-SHELL", "command -v pnpm"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
 volumes:
   pnpm-store:

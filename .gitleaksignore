@@ -1,0 +1,8 @@
+# Documented false-positive exceptions for gitleaks.
+# Each line is a finding fingerprint (<commit>:<file>:<rule-id>:<line>), one per exception.
+# Add a fingerprint here only after confirming the flagged string is NOT a real secret,
+# and explain why in the commit message that adds it.
+
+# CLAUDE.md line documenting the sonar.projectKey config value (the repo's own
+# name, not a secret) trips generic-api-key on the assignment shape + entropy.
+CLAUDE.md:generic-api-key:239

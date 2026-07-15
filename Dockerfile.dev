@@ -17,8 +17,9 @@ WORKDIR /home/node
 # Install pnpm for the node user
 RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.profile" SHELL="$(which sh)" sh -
 
-# Add pnpm to PATH for the node user
-ENV PATH="/home/node/.local/share/pnpm:$PATH"
+# Add pnpm to PATH for the node user (the standalone installer puts the
+# binary in the "bin" subdir of PNPM_HOME, not PNPM_HOME itself)
+ENV PATH="/home/node/.local/share/pnpm/bin:/home/node/.local/share/pnpm:$PATH"
 
 # Set the working directory
 WORKDIR /app
