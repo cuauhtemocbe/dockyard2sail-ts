@@ -33,6 +33,9 @@ pnpm typecheck         # solo chequeo de tipos
 pnpm test              # vitest en modo watch
 pnpm test:run          # vitest una sola corrida
 pnpm test:coverage     # vitest con cobertura (v8)
+pnpm lint              # biome check (lint)
+pnpm format            # biome format --write
+pnpm format:check      # biome format (sin escribir, para CI/hooks)
 pnpm validate          # typecheck + test:run + build (scripts/validate.sh)
 ```
 

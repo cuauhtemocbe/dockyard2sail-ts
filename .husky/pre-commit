@@ -11,6 +11,13 @@ else
   echo "⚠️  gitleaks not installed — skipping secret scan (install: https://github.com/gitleaks/gitleaks#installing)"
 fi
 
-# Skip full validations on regular commits for faster development
+# Lint/format staged files (fast — only touches what's staged, unlike the
+# full validation suite which runs on merge/push instead)
+pnpm exec lint-staged
+if [ $? -ne 0 ]; then
+  echo "❌ lint-staged found issues in staged files — commit blocked"
+  exit 1
+fi
+
 echo "⚡ Skipping full validations on regular commit (validations run on merge only)"
 exit 0
