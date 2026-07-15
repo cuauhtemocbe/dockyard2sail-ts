@@ -40,6 +40,11 @@ COPY --from=builder --chown=nodeuser:nodeuser /app/dist ./dist
 # Install a simple HTTP server
 RUN pnpm add -g serve
 
+# Remove npm/npx — the base image bundles them, but this project uses pnpm
+# exclusively and nothing at runtime (serve, a standalone pnpm-installed
+# binary) shells out to them. Less attack surface, fewer bundled CVEs.
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
+
 USER nodeuser
 
 EXPOSE 8080
