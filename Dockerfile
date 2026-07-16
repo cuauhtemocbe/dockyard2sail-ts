@@ -4,7 +4,9 @@ FROM node:26-alpine AS builder
 RUN apk add --no-cache git
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# corepack is no longer bundled with the Node image as of node:26 — install
+# pnpm directly via npm instead (works identically on every Node line).
+RUN npm install -g pnpm@9.0.0
 
 WORKDIR /app
 
@@ -27,7 +29,9 @@ ENV PNPM_HOME="/home/nodeuser/.local/share/pnpm"
 ENV PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH"
 ENV PORT=8080
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# corepack is no longer bundled with the Node image as of node:26 — install
+# pnpm directly via npm instead (works identically on every Node line).
+RUN npm install -g pnpm@9.0.0
 
 # Create user without privileges
 RUN adduser -D -u 10001 nodeuser
