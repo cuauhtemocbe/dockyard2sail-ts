@@ -10,7 +10,7 @@ if echo "$current_branch" | grep -qE "^($protected_branch)$"; then
     echo "🛡️  Pushing to protected branch: $current_branch"
     
     # Run full validation
-    if ! ./scripts/validate.sh; then
+    if ! make validate; then
         echo "❌ Pre-push validation failed"
         exit 1
     fi

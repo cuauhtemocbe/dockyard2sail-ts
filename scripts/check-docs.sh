@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Documentation consistency checks: CHANGELOG version vs package.json, and
-# CLAUDE.md's documented tooling exceptions (no hosted CI, no Makefile).
+# CLAUDE.md's documented tooling exceptions (no hosted CI).
 
 set -e
 
@@ -34,13 +34,6 @@ check_claude_md_exceptions() {
     FAILED=1
   else
     echo "✅ CLAUDE.md documents the hosted CI exception"
-  fi
-
-  if ! grep -q "Makefile" CLAUDE.md; then
-    echo "❌ CLAUDE.md: missing documented exception for Makefile absence"
-    FAILED=1
-  else
-    echo "✅ CLAUDE.md documents the Makefile exception"
   fi
 }
 

@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    /* Relaxed rigor for tests: unused mocks/doubles/params are common and not worth the friction. */
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "include": ["src/test/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

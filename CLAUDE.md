@@ -28,16 +28,34 @@ Este proyecto usa **pnpm exclusivamente**. No usar `npm` ni `yarn` — el `packa
 ```bash
 pnpm install
 pnpm dev              # servidor de desarrollo (Vite)
-pnpm build             # tsc + vite build
-pnpm typecheck         # solo chequeo de tipos
+pnpm build             # tsc (tsconfig.json) + vite build
+pnpm typecheck         # tsc --noEmit sobre tsconfig.json (src) y tsconfig.test.json (tests, rigor relajado)
 pnpm test              # vitest en modo watch
 pnpm test:run          # vitest una sola corrida
 pnpm test:coverage     # vitest con cobertura (v8)
 pnpm lint              # biome check (lint)
 pnpm format            # biome format --write
 pnpm format:check      # biome format (sin escribir, para CI/hooks)
-pnpm validate          # typecheck + test:run + build (scripts/validate.sh)
+pnpm validate          # alias de `make validate` (ver sección Makefile)
 ```
+
+---
+
+## Makefile
+
+Interfaz autodocumentada para la validación del proyecto — correr `make` o `make help` sin argumentos lista los targets disponibles (`.DEFAULT_GOAL := help`).
+
+```bash
+make help          # lista los targets con su descripción
+make lock-check     # pnpm install --frozen-lockfile — falla si pnpm-lock.yaml no está en sync con package.json
+make check-docs     # scripts/check-docs.sh — versión de CHANGELOG.md en sync + excepciones de CLAUDE.md
+make validate       # lock-check + typecheck + test:coverage + build + pnpm audit + check-docs
+```
+
+- `make validate` es lo que corren `pre-push`/`pre-merge-commit` hacia `main`/`develop` (ver "Git Hooks" abajo) y lo que corre `pnpm validate` como alias.
+- Reemplaza al antiguo `scripts/validate.sh` (eliminado) — la lógica vive ahora en el `Makefile`, gateada igual que antes.
+- Scope deliberadamente acotado: el Makefile cubre la validación (el único punto donde orquestar varios pasos en secuencia aporta), no envuelve cada script de `pnpm` uno a uno — `pnpm dev`/`pnpm test`/etc. siguen siendo la interfaz directa para el día a día.
+- Requiere `make` en el host (o en el contenedor de dev, ver Docker abajo — `Dockerfile.dev` lo instala vía `apk add make`).
 
 ---
 
@@ -84,7 +102,7 @@ pnpm validate          # typecheck + test:run + build (scripts/validate.sh)
   - Requiere `gitleaks` instalado en el host (no corre en Docker): [instalación](https://github.com/gitleaks/gitleaks#installing). Si no está instalado, el hook avisa y continúa (no bloquea el commit) — instalarlo es responsabilidad de cada dev.
   - Falsos positivos documentados y justificados van a `.gitleaksignore` (fingerprint por línea), nunca se ignora silenciosamente.
 - **`pre-push`**:
-  - A `main`/`develop`: corre `scripts/validate.sh` completo (typecheck + test + build + `pnpm audit`)
+  - A `main`/`develop`: corre `make validate` completo (lock-check + typecheck + test:coverage + build + `pnpm audit` + check-docs)
   - A otras ramas: solo `pnpm typecheck`
 - **`pre-merge-commit`**: validación completa
 
@@ -106,15 +124,13 @@ El repo remoto es `cuauhtemocbe/dockyard2sail-ts` en GitHub. Usar el skill `/use
 
 ## Excepciones deliberadas de tooling
 
-Este proyecto se desvía de dos prácticas estándar de forma explícita, no por omisión — documentado acá para que nadie las "corrija" sin contexto (ver referencia de prácticas, `/home/kuautli/Projects/README.md`, secciones 2 y 4).
+Este proyecto se desvía de una práctica estándar de forma explícita, no por omisión — documentado acá para que nadie la "corrija" sin contexto (ver referencia de prácticas, `/home/kuautli/Projects/README.md`, sección 4).
 
 ### CI/CD (GitHub Actions)
 
-No hay workflows de GitHub Actions. Para un repo solo/bajo tráfico como este, `scripts/validate.sh` gateado en `pre-push`/`pre-merge-commit` hacia `main`/`develop` (ver "Git Hooks" arriba) cumple el mismo objetivo — nada roto llega a `main` — sin mantener YAML de CI para un único colaborador. Migrar a Actions en cuanto el repo sume colaboradores activos o pase a producción con usuarios reales.
+No hay workflows de GitHub Actions. Para un repo solo/bajo tráfico como este, `make validate` gateado en `pre-push`/`pre-merge-commit` hacia `main`/`develop` (ver "Git Hooks" arriba) cumple el mismo objetivo — nada roto llega a `main` — sin mantener YAML de CI para un único colaborador. Migrar a Actions en cuanto el repo sume colaboradores activos o pase a producción con usuarios reales.
 
-### Makefile
-
-No hay `Makefile`. Los scripts de `pnpm` (`package.json`) más `scripts/validate.sh` ya son la interfaz única de comandos del proyecto a este tamaño — un `Makefile` envolviendo esos mismos comandos sería una capa redundante. Reconsiderar si el proyecto crece lo suficiente como para necesitar orquestación que `pnpm`/Docker Compose no cubran directamente.
+> Nota histórica: hasta la introducción del `Makefile` (ver sección arriba), este repo tampoco tenía `Makefile` como excepción deliberada — se revirtió esa decisión al introducir `make validate` en reemplazo de `scripts/validate.sh`.
 
 ---
 
@@ -200,7 +216,7 @@ src/
 - **KISS**: código plano, fácil de leer y testear. Preferir funciones puras sobre clases cuando sea posible.
 - **Structural Typing**: aprovechar el duck typing estructural de TypeScript; usar `interface` en vez de jerarquías de clases.
 - **Módulos ES**: `package.json` tiene `"type": "module"` — usar imports ESM, no `require`.
-- **TypeScript estricto**: respetar la configuración de `tsconfig.json` (ES2022, source maps, path aliases).
+- **TypeScript estricto**: respetar la configuración de `tsconfig.json` (ES2022, source maps, path aliases). `src/test/**` usa `tsconfig.test.json` (extiende la base, relaja `noUnusedLocals`/`noUnusedParameters` — mocks y dobles de test sin usar son aceptables ahí, no vale la pena el costo de rigor).
 - Si el proyecto crece más allá de un boilerplate (agrega dominio de negocio real), introducir separación de capas (presentación / lógica de negocio / infraestructura) recién en ese momento — no antes.
 
 ---
@@ -208,7 +224,7 @@ src/
 ## Docker
 
 - **`Dockerfile`**: build multi-stage para producción
-- **`Dockerfile.dev`**: entorno de desarrollo (usado por DevContainers y `docker-compose.yml`)
+- **`Dockerfile.dev`**: entorno de desarrollo (usado por DevContainers y `docker-compose.yml`) — incluye `make` (apk) para poder correr `make validate` dentro del contenedor
 - **`docker-compose.yml`**: levanta el entorno de desarrollo completo — el servicio `app` tiene `healthcheck` (confirma que `pnpm` está disponible), usar `--wait` para no ejecutar comandos contra un contenedor que todavía no está listo
 
 ```bash
