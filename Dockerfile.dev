@@ -10,16 +10,15 @@ RUN mkdir -p /home/node/.pnpm-store && chown -R node:node /home/node/.pnpm-store
 COPY scripts/ /app/scripts/
 RUN chmod +x /app/scripts/validate.sh
 
+# Install pnpm globally as root (before switching users) via npm rather than
+# corepack or the get.pnpm.io standalone installer: both of those resolve the
+# pinned version through the native @pnpm/exe package, which only ships
+# glibc-linked binaries and silently breaks on this Alpine (musl) image.
+RUN npm install -g pnpm@9.0.0
+
 # Switch to node user early
 USER node
 WORKDIR /home/node
-
-# Install pnpm for the node user
-RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.profile" SHELL="$(which sh)" sh -
-
-# Add pnpm to PATH for the node user (the standalone installer puts the
-# binary in the "bin" subdir of PNPM_HOME, not PNPM_HOME itself)
-ENV PATH="/home/node/.local/share/pnpm/bin:/home/node/.local/share/pnpm:$PATH"
 
 # Set the working directory
 WORKDIR /app
