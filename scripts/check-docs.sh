@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Documentation consistency checks: CHANGELOG version vs package.json, and
-# CLAUDE.md's documented tooling exceptions (no hosted CI).
+# that CLAUDE.md still documents the CI/CD (GitHub Actions) setup.
 
 set -e
 
@@ -30,10 +30,10 @@ check_changelog_version() {
 
 check_claude_md_exceptions() {
   if ! grep -q "CI/CD (GitHub Actions)" CLAUDE.md; then
-    echo "❌ CLAUDE.md: missing documented exception for hosted CI absence"
+    echo "❌ CLAUDE.md: missing the documented CI/CD (GitHub Actions) section"
     FAILED=1
   else
-    echo "✅ CLAUDE.md documents the hosted CI exception"
+    echo "✅ CLAUDE.md documents the CI/CD (GitHub Actions) setup"
   fi
 }
 

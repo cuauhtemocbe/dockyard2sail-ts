@@ -118,19 +118,20 @@ El repo remoto es `cuauhtemocbe/dockyard2sail-ts` en GitHub. Usar el skill `/use
 
 ### Branch Protection (main)
 
-`main` tiene protección habilitada: sin force-push, sin borrado de la rama. `enforce_admins: false` — decisión deliberada, no descuido: el owner (único colaborador activo) puede seguir pusheando directo cuando hace sentido en un repo solo/bajo tráfico. No hay `required_status_checks` porque no hay CI hosteado — ver la sección siguiente.
+`main` tiene protección habilitada: sin force-push, sin borrado de la rama. `enforce_admins: false` — decisión deliberada, no descuido: el owner (único colaborador activo) puede seguir pusheando directo cuando hace sentido en un repo solo/bajo tráfico. Todavía no hay `required_status_checks`: el workflow de CI ya existe y reporta un status check (ver "CI/CD (GitHub Actions)" abajo), pero volverlo un check requerido es una decisión de settings de rama, separada y posterior a que el `ci.yml` llegue a `main`.
 
 ---
 
-## Excepciones deliberadas de tooling
+## CI/CD (GitHub Actions)
 
-Este proyecto se desvía de una práctica estándar de forma explícita, no por omisión — documentado acá para que nadie la "corrija" sin contexto (ver referencia de prácticas, `/home/kuautli/Projects/README.md`, sección 4).
+`.github/workflows/ci.yml` corre en cada `push` y `pull_request`: un único job que ejecuta `make validate` (lock-check → typecheck → test:coverage → build → audit → check-docs) sobre `ubuntu-latest` con Node 22 + pnpm 9 (`--frozen-lockfile`). Es un wrapper fino sobre el comando que ya define el repo — no introduce ningún toolchain nuevo — y reporta un status check contra cada PR.
 
-### CI/CD (GitHub Actions)
+- `permissions: contents: read` (mínimo privilegio); `actions/*` pineados a major (`@v4`); `timeout-minutes: 10`.
+- El workflow **no reemplaza** los git hooks: `pre-push`/`pre-merge-commit` siguen corriendo `make validate` localmente (ver "Git Hooks" arriba). CI es la red de seguridad en el server; los hooks son el feedback rápido en el host. Ambos corren el mismo `make validate`, así que no divergen.
 
-No hay workflows de GitHub Actions. Para un repo solo/bajo tráfico como este, `make validate` gateado en `pre-push`/`pre-merge-commit` hacia `main`/`develop` (ver "Git Hooks" arriba) cumple el mismo objetivo — nada roto llega a `main` — sin mantener YAML de CI para un único colaborador. Migrar a Actions en cuanto el repo sume colaboradores activos o pase a producción con usuarios reales.
+> Nota histórica: hasta esta story, este repo mantenía la **ausencia** de GitHub Actions como excepción deliberada (`make validate` en `pre-push` bastaba para un repo solo/bajo tráfico). Se revirtió esa decisión al incorporar el repo al layer de auto-merge de meta-projects, que exige un `.github/workflows/` con un status check para que un PR sea auto-merge-eligible (`is_automerge_allowed` en `scripts/lib/common.sh`). Habilitar auto-merge y agregar `required_status_checks` a la protección de rama son decisiones separadas y posteriores.
 
-> Nota histórica: hasta la introducción del `Makefile` (ver sección arriba), este repo tampoco tenía `Makefile` como excepción deliberada — se revirtió esa decisión al introducir `make validate` en reemplazo de `scripts/validate.sh`.
+> Nota histórica: hasta la introducción del `Makefile`, este repo tampoco tenía `Makefile` como excepción deliberada — se revirtió esa decisión al introducir `make validate` en reemplazo de `scripts/validate.sh`.
 
 ---
 
