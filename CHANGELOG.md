@@ -11,6 +11,10 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 - Workflow de CI en GitHub Actions (`.github/workflows/ci.yml`): corre `make validate` en cada `push`/`pull_request` (Node 22 + pnpm 9, `--frozen-lockfile`), reportando un status check por PR. Habilita al repo para el layer de auto-merge de meta-projects (`is_automerge_allowed`).
 
+### Changed
+
+- `.github/dependabot.yml`: agregado un bloque `groups.minor-and-patch` (`update-types: ["minor", "patch"]`) a cada ecosystem (`npm`, `docker`, `github-actions`) para que los bumps menores/patch lleguen agrupados en un solo PR por ecosystem en vez de uno por dependencia. Los bumps `major` quedan fuera del grupo y siguen abriendo PR individual, alineado con la política de nunca auto-mergear majors en meta-projects.
+
 ## [1.0.0] - 2026-07-15
 
 ### Added
