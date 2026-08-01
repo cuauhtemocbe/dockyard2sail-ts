@@ -10,14 +10,14 @@ importers:
     dependencies:
       vite:
         specifier: ^8.1.5
-        version: 8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4)
+        version: 8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4)
     devDependencies:
       '@biomejs/biome':
         specifier: 2.5.6
         version: 2.5.6
       '@types/node':
-        specifier: ^26.1.1
-        version: 26.1.1
+        specifier: ^26.1.2
+        version: 26.1.2
       '@vitest/coverage-v8':
         specifier: ^4.1.5
         version: 4.1.5(vitest@4.1.5)
@@ -41,7 +41,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: ^4.1.5
-        version: 4.1.5(@types/node@26.1.1)(@vitest/coverage-v8@4.1.5)(@vitest/ui@4.1.5)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4))
+        version: 4.1.5(@types/node@26.1.2)(@vitest/coverage-v8@4.1.5)(@vitest/ui@4.1.5)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4))
 
 packages:
 
@@ -477,8 +477,8 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
-  '@types/node@26.1.1':
-    resolution: {integrity: sha512-nxAkRSVkN1Y0JC1W8ky/fTfkGsMmcrRsbx+3XoZE+rMOX71kLYTV7fLXpqud1GpbpP5TuffXFqfX7fH2GgZREw==}
+  '@types/node@26.1.2':
+    resolution: {integrity: sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg==}
 
   '@typescript/typescript-aix-ppc64@7.0.2':
     resolution: {integrity: sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ==}
@@ -1481,7 +1481,7 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
-  '@types/node@26.1.1':
+  '@types/node@26.1.2':
     dependencies:
       undici-types: 8.3.0
 
@@ -1557,7 +1557,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.5(@types/node@26.1.1)(@vitest/coverage-v8@4.1.5)(@vitest/ui@4.1.5)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4))
+      vitest: 4.1.5(@types/node@26.1.2)(@vitest/coverage-v8@4.1.5)(@vitest/ui@4.1.5)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4))
 
   '@vitest/expect@4.1.5':
     dependencies:
@@ -1568,13 +1568,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.5(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4))':
+  '@vitest/mocker@4.1.5(vite@8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4))':
     dependencies:
       '@vitest/spy': 4.1.5
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4)
+      vite: 8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4)
 
   '@vitest/pretty-format@4.1.5':
     dependencies:
@@ -1603,7 +1603,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
-      vitest: 4.1.5(@types/node@26.1.1)(@vitest/coverage-v8@4.1.5)(@vitest/ui@4.1.5)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4))
+      vitest: 4.1.5(@types/node@26.1.2)(@vitest/coverage-v8@4.1.5)(@vitest/ui@4.1.5)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4))
 
   '@vitest/utils@4.1.5':
     dependencies:
@@ -2053,7 +2053,7 @@ snapshots:
 
   undici@7.28.0: {}
 
-  vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4):
+  vite@8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.5
@@ -2061,15 +2061,15 @@ snapshots:
       rolldown: 1.1.5
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.1.1
+      '@types/node': 26.1.2
       esbuild: 0.28.1
       fsevents: 2.3.3
       yaml: 2.8.4
 
-  vitest@4.1.5(@types/node@26.1.1)(@vitest/coverage-v8@4.1.5)(@vitest/ui@4.1.5)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4)):
+  vitest@4.1.5(@types/node@26.1.2)(@vitest/coverage-v8@4.1.5)(@vitest/ui@4.1.5)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4)):
     dependencies:
       '@vitest/expect': 4.1.5
-      '@vitest/mocker': 4.1.5(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4))
+      '@vitest/mocker': 4.1.5(vite@8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4))
       '@vitest/pretty-format': 4.1.5
       '@vitest/runner': 4.1.5
       '@vitest/snapshot': 4.1.5
@@ -2086,10 +2086,10 @@ snapshots:
       tinyexec: 1.1.2
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
-      vite: 8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(yaml@2.8.4)
+      vite: 8.1.5(@types/node@26.1.2)(esbuild@0.28.1)(yaml@2.8.4)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 26.1.1
+      '@types/node': 26.1.2
       '@vitest/coverage-v8': 4.1.5(vitest@4.1.5)
       '@vitest/ui': 4.1.5(vitest@4.1.5)
       jsdom: 29.1.1
