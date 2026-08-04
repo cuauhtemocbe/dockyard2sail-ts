@@ -133,6 +133,16 @@ El repo remoto es `cuauhtemocbe/dockyard2sail-ts` en GitHub. Usar el skill `/use
 
 > Nota histórica: hasta la introducción del `Makefile`, este repo tampoco tenía `Makefile` como excepción deliberada — se revirtió esa decisión al introducir `make validate` en reemplazo de `scripts/validate.sh`.
 
+### Dependabot Socket Firewall gate
+
+`.github/workflows/dependabot-socket-firewall.yml` es un workflow separado (no un job dentro de `ci.yml`), gateado a `if: github.actor == 'dependabot[bot]'`: reinstala las dependencias de la PR vía `sfw pnpm install --frozen-lockfile` (Socket Firewall Free) y, si `sfw` bloquea un paquete por comportamiento malicioso/comprometido, cierra la PR automáticamente con `gh pr close` y un comentario explicando el motivo.
+
+- Existe como workflow aparte y no como job de `ci.yml` porque necesita `permissions: pull-requests: write` — `ci.yml` se mantiene en `contents: read` (mínimo privilegio) para cualquier PR humana o de bot.
+- Solo corre para PRs de `dependabot[bot]`: son las únicas que proponen bumps de dependencias de terceros sin que nadie las revise línea por línea antes de ser mergeables. PRs humanas no disparan este job.
+- El paso `SocketDev/action` está pineado a SHA (a diferencia del resto de `actions/*` en este repo, que siguen en `@v4` — ver issue #29 para el pineo general, todavía abierto) porque es el componente que corre con permiso de escritura sobre PRs; se prioriza ese caso sobre la consistencia con el resto del repo.
+- Patrón portado del repo hermano `dockyard2sail-py` (commit `89d33ea`), adaptado: ese repo usa Poetry y `sfw` no soporta Poetry directamente, así que exporta el lockfile a `requirements.txt` primero; acá `sfw` soporta pnpm nativamente, así que corre directo contra `pnpm-lock.yaml` sin paso de traducción.
+- Alcance: solo dependencias npm (vía pnpm). Los ecosystems `docker` y `github-actions` de `.github/dependabot.yml` no pasan por este gate — `sfw` no tiene modo de escaneo para imágenes Docker (Trivy ya cubre eso, ver "Security Scanning" abajo) ni para bumps de GitHub Actions.
+
 ---
 
 ## Memory (Engram)

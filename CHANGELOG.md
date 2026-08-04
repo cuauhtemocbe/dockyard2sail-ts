@@ -10,6 +10,7 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Added
 
 - Workflow de CI en GitHub Actions (`.github/workflows/ci.yml`): corre `make validate` en cada `push`/`pull_request` (Node 22 + pnpm 9, `--frozen-lockfile`), reportando un status check por PR. Habilita al repo para el layer de auto-merge de meta-projects (`is_automerge_allowed`).
+- Workflow `.github/workflows/dependabot-socket-firewall.yml`: gatea las PRs de `dependabot[bot]` contra Socket Firewall Free (`sfw pnpm install --frozen-lockfile`), cerrando automáticamente la PR si `sfw` bloquea un paquete por comportamiento malicioso/comprometido. Cierra el gap de "PRs automatizadas sin revisión humana" (issue #32), portado del patrón ya validado en `dockyard2sail-py`.
 
 ### Changed
 

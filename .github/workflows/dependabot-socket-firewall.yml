@@ -1,0 +1,43 @@
+name: Dependabot Socket Firewall
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  socket-check:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      # Version resolved from the "packageManager" field in package.json —
+      # do not pin a version here, it conflicts with that field.
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: SocketDev/action@ba6de6cc0565af1f42295590380973573297e31f # v1.3.2
+        with:
+          mode: firewall-free
+
+      - name: Install with firewall
+        id: install
+        run: sfw pnpm install --frozen-lockfile
+        continue-on-error: true
+
+      - name: Close PR if firewall blocked something
+        if: steps.install.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr close ${{ github.event.pull_request.number }} \
+            --comment "Socket Firewall blocked this dependency for malicious/suspicious behavior. Closed automatically."
