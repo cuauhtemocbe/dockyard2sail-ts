@@ -37,3 +37,14 @@ jobs:
       # → test:coverage → build → audit → check-docs. No new toolchain.
       - name: Validate
         run: make validate
+
+      # Filesystem scan: dependency CVEs + secrets + IaC misconfigurations.
+      # Fails the job on HIGH/CRITICAL; accepted exceptions go in .trivyignore.
+      - name: Trivy filesystem scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,config
+          severity: HIGH,CRITICAL
+          exit-code: 1
