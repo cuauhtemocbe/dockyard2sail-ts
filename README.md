@@ -43,10 +43,10 @@ _Un boilerplate moderno y listo para producción con TypeScript, Docker y DevCon
 ├── docker-compose.yml      # Entorno de desarrollo
 ├── Dockerfile              # Build de producción
 ├── Dockerfile.dev          # Entorno de desarrollo
+├── Makefile                 # Validación (make validate, ver "Scripts Disponibles")
 ├── package.json            # Dependencias y scripts
 ├── tsconfig.json           # Configuración de TypeScript
-├── vite.config.ts          # Configuración de Vite
-└── vitest.config.ts        # Configuración de pruebas
+└── vite.config.ts          # Configuración de Vite (incluye config de pruebas)
 ```
 
 ---
@@ -159,7 +159,7 @@ docker run -p 8080:8080 mi-app:latest
 
 - **TypeScript (tsconfig.json)**: Chequeo estricto, ES2022, alias de paths, source maps
 - **Vite (vite.config.ts)**: HMR, optimización para producción, alias de paths
-- **Testing (vitest.config.ts)**: Entorno JSDOM, reportes de cobertura, modo UI
+- **Testing (vite.config.ts, bloque `test`)**: Entorno JSDOM, reportes de cobertura, modo UI
 - **Package Manager (.npmrc, .pnpmrc)**: Optimizado para CI/CD
 
 ---

@@ -34,10 +34,10 @@ _A production-ready TypeScript + Docker + DevContainers boilerplate_
 ├── docker-compose.yml      # Development environment
 ├── Dockerfile              # Production build
 ├── Dockerfile.dev          # Development environment
+├── Makefile                 # Validation (make validate, see "Available Scripts")
 ├── package.json            # Dependencies and scripts
 ├── tsconfig.json           # TypeScript configuration
-├── vite.config.ts          # Vite configuration
-└── vitest.config.ts        # Testing configuration
+└── vite.config.ts          # Vite configuration (includes testing config)
 ```
 
 ➡️ [More details about Boilerplate](./docs/Boilerplate_INFO.md)
@@ -201,7 +201,7 @@ docker run -p 8080:8080 my-app:latest
 - Path aliases matching TypeScript config
 - Production optimizations
 
-### Testing (vitest.config.ts)
+### Testing (vite.config.ts, `test` block)
 
 - JSDOM environment for browser-like testing
 - Coverage reporting with v8
