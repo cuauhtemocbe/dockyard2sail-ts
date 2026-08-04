@@ -10,8 +10,6 @@ Boilerplate/
 │   ├── pre-commit                 # Fast commit hook (validation disabled)
 │   ├── pre-merge-commit          # Full validation on merge
 │   └── pre-push                  # Push validation
-├── scripts/
-│   └── validate.sh               # Validation script (typecheck + test + build)
 ├── src/
 │   ├── test/
 │   │   └── main.test.ts          # Example test file
@@ -26,11 +24,11 @@ Boilerplate/
 ├── Dockerfile.dev                # Development Docker image
 ├── index.html                    # Simple HTML entry point
 ├── LICENSE                       # MIT License
+├── Makefile                      # Validation entrypoint (make validate)
 ├── package.json                  # Dependencies and scripts
 ├── README.md                     # Comprehensive documentation
 ├── tsconfig.json                 # TypeScript configuration
-├── vite.config.ts               # Vite build tool configuration
-└── vitest.config.ts             # Vitest testing configuration
+└── vite.config.ts               # Vite build tool configuration (includes testing config)
 ```
 
 ## 🚀 Quick Start
