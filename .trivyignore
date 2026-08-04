@@ -1,0 +1,11 @@
+# Trivy filesystem scan exceptions (CI gate: .github/workflows/ci.yml)
+#
+# Only HIGH/CRITICAL findings fail the CI job (see /trivy-scan skill for the
+# local, human-driven scan workflow, which uses .trivyignore.yaml instead).
+#
+# Format: one finding ID per line (CVE-XXXX-XXXXX, secret rule ID, or AVD
+# misconfig check ID). Document the justification as a comment above each
+# entry — never suppress silently.
+#
+# No entries yet — baseline scan (2026-08-04) found zero HIGH/CRITICAL
+# findings in this repo.
