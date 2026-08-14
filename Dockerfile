@@ -54,7 +54,18 @@ USER nodeuser
 EXPOSE 8080
 
 # Health check
+# Explicit `sh -c "..."` (not a plain executable array) so ${PORT:-8080} is
+# expanded by the shell at container start — a plain exec-form array
+# (e.g. ["curl", "-f", "http://localhost:8080/"]) never goes through a shell,
+# so $PORT substitution silently never happens there. See CMD below for the
+# same reasoning.
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8080/ || exit 1
+  CMD ["sh", "-c", "curl -f http://localhost:${PORT:-8080}/ || exit 1"]
 
-CMD ["serve", "-s", "dist", "-l", "8080"]
+# Explicit `sh -c "..."` so ${PORT:-8080} expands at container start, honoring
+# PORT when the platform injects one (e.g. cloud hosts assigning a dynamic
+# port) and falling back to 8080 when it's unset — matches ENV PORT=8080
+# above. The previous plain exec-form array (`["serve", "-s", "dist", "-l",
+# "8080"]`) never went through a shell, so `$PORT` substitution never happened
+# even with ENV PORT=8080 set.
+CMD ["sh", "-c", "serve -s dist -l ${PORT:-8080}"]

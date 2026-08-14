@@ -16,6 +16,10 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 - `.github/dependabot.yml`: agregado un bloque `groups.minor-and-patch` (`update-types: ["minor", "patch"]`) a cada ecosystem (`npm`, `docker`, `github-actions`) para que los bumps menores/patch lleguen agrupados en un solo PR por ecosystem en vez de uno por dependencia. Los bumps `major` quedan fuera del grupo y siguen abriendo PR individual, alineado con la política de nunca auto-mergear majors en meta-projects.
 
+### Fixed
+
+- `Dockerfile` (stage `production`): `CMD` y `HEALTHCHECK` pasan de exec-form a shell-form explícito (`["sh", "-c", "... ${PORT:-8080} ..."]`) para que `$PORT` se expanda al arrancar el contenedor — el exec-form array previo nunca pasaba por un shell, así que `ENV PORT=8080` no tenía ningún efecto real y el contenedor siempre escuchaba en 8080 sin importar el `PORT` inyectado por la plataforma de deploy. Agrega `scripts/check-docker-cmd-shell-form.sh` (chequeo estático, sin build) y `scripts/docker-port-smoke-test.sh` (build real + dos escenarios de runtime), ambos corridos por `make validate` (issue #46).
+
 ## [1.0.0] - 2026-07-15
 
 ### Added

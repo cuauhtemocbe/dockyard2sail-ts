@@ -244,6 +244,15 @@ docker compose up -d --wait
 docker compose exec app bash
 ```
 
+### Dynamic PORT binding (producción)
+
+El stage `production` de `Dockerfile` setea `ENV PORT=8080` y usa `CMD`/`HEALTHCHECK` en shell form explícito (`["sh", "-c", "... ${PORT:-8080} ..."]`) para que `$PORT` se expanda al arrancar el contenedor — el form exec-form array (`CMD ["serve", "-s", "dist", "-l", "8080"]`) nunca pasa por un shell, así que la sustitución de variables nunca ocurría aunque `ENV PORT` estuviera seteado. Sin `PORT` seteado, el contenedor escucha en 8080 (comportamiento por defecto sin cambios); con `PORT=<N>` seteado en `docker run`, escucha en `<N>`.
+
+Dos checks nuevos verifican esto automáticamente, ambos corridos por `make validate` (por lo tanto en `pre-push`/`pre-merge-commit` a `main`/`develop` y en `ci.yml` en cada push):
+
+- **`make check-docker-cmd-shell-form`** (`scripts/check-docker-cmd-shell-form.sh`): chequeo estático vía grep/regex, sin build de Docker — falla rápido si `CMD` o `HEALTHCHECK` vuelven a exec-form hardcodeado o dejan de referenciar `PORT`. Guardia de regresión de feedback instantáneo.
+- **`make docker-port-smoke-test`** (`scripts/docker-port-smoke-test.sh`): build real de la imagen de producción, corre dos escenarios (sin `PORT` → espera 8080, con `PORT=3000` → espera 3000), en cada uno hace `curl` desde el host al puerto mapeado dinámicamente y verifica HTTP 200 + `docker inspect --format='{{.State.Health.Status}}'` == `healthy`. Limpia los contenedores/imagen que crea al salir, tanto en éxito como en falla.
+
 ---
 
 ## Testing Guidelines
