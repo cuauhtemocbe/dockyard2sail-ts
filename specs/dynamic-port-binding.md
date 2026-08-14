@@ -1,6 +1,6 @@
 ---
 title: Dynamic Port Binding in Production Container
-status: approved
+status: completed
 created: 2026-08-13
 updated: 2026-08-13
 issue: #46
