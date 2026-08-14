@@ -153,6 +153,14 @@ docker build -t mi-app:latest .
 docker run -p 8080:8080 mi-app:latest
 ```
 
+### 🔒 Por qué la imagen de producción está pineada y la de dev no
+
+La imagen de producción (`Dockerfile`, stage `production`) está pineada por digest (`FROM node:26-alpine@sha256:...`) para builds reproducibles: el mismo digest siempre resuelve exactamente a los mismos bytes, sin sorpresas entre un build y el siguiente.
+
+La imagen de desarrollo (`Dockerfile.dev`) usa a propósito un tag flotante (`FROM node:26-alpine`, sin digest) — en desarrollo local pesa más recibir parches de seguridad automáticamente en cada rebuild que la reproducibilidad exacta.
+
+Esta asimetría es intencional, no un descuido — no "corregir" el pinning de `Dockerfile.dev` para que coincida con `Dockerfile`.
+
 ---
 
 ## 🧭 Archivos de Configuración

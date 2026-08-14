@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# Documentation consistency checks: CHANGELOG version vs package.json, and
-# that CLAUDE.md still documents the CI/CD (GitHub Actions) setup.
+# Documentation consistency checks: CHANGELOG version vs package.json, that
+# CLAUDE.md still documents the CI/CD (GitHub Actions) setup, that LICENSE
+# hasn't disappeared, and that README.md still explains the Docker digest-
+# pinning asymmetry (prod pinned vs. dev floating tag).
 
 set -e
 
@@ -37,7 +39,30 @@ check_claude_md_exceptions() {
   fi
 }
 
+check_license_exists() {
+  if [ ! -f "LICENSE" ]; then
+    echo "❌ LICENSE file not found at repo root"
+    FAILED=1
+  else
+    echo "✅ LICENSE file present"
+  fi
+}
+
+check_readme_docker_pinning() {
+  if ! grep -qi "digest" README.md || ! grep -qi "reproducibles" README.md; then
+    echo "❌ README.md: falta la explicación de por qué la imagen de producción está pineada por digest (builds reproducibles)"
+    FAILED=1
+  elif ! grep -qi "tag flotante" README.md || ! grep -qi "parches de seguridad" README.md; then
+    echo "❌ README.md: falta la explicación de por qué la imagen de dev usa tag flotante (parches de seguridad automáticos)"
+    FAILED=1
+  else
+    echo "✅ README.md documenta la asimetría de pinning por digest (prod) vs tag flotante (dev)"
+  fi
+}
+
 check_changelog_version
 check_claude_md_exceptions
+check_license_exists
+check_readme_docker_pinning
 
 exit $FAILED
