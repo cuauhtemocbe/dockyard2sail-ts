@@ -20,6 +20,7 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Fixed
 
+- `pnpm.overrides` en `package.json` pinea `nanoid` a `3.3.18`, resolviendo `CVE-2026-67213` (HIGH, DoS por loop infinito en la generación de IDs aleatorios). `nanoid` es dependencia transitiva de `postcss` (vía `vite`/`vitest`/`@vitest/*`), que solo declara `^3.3.16` — sin el override, `pnpm` seguía resolviendo el `3.3.17` vulnerable ya publicado. `main`'s `trivy-fs` job estaba rojo por este hallazgo, sin relación con ninguna PR en curso (issue #58).
 - `Dockerfile` (stage `production`): `CMD` y `HEALTHCHECK` pasan de exec-form a shell-form explícito (`["sh", "-c", "... ${PORT:-8080} ..."]`) para que `$PORT` se expanda al arrancar el contenedor — el exec-form array previo nunca pasaba por un shell, así que `ENV PORT=8080` no tenía ningún efecto real y el contenedor siempre escuchaba en 8080 sin importar el `PORT` inyectado por la plataforma de deploy. Agrega `scripts/check-docker-cmd-shell-form.sh` (chequeo estático, sin build) y `scripts/docker-port-smoke-test.sh` (build real + dos escenarios de runtime), ambos corridos por `make validate` (issue #46).
 
 ## [1.0.0] - 2026-07-15
