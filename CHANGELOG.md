@@ -15,6 +15,7 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Changed
 
 - `.github/dependabot.yml`: agregado un bloque `groups.minor-and-patch` (`update-types: ["minor", "patch"]`) a cada ecosystem (`npm`, `docker`, `github-actions`) para que los bumps menores/patch lleguen agrupados en un solo PR por ecosystem en vez de uno por dependencia. Los bumps `major` quedan fuera del grupo y siguen abriendo PR individual, alineado con la política de nunca auto-mergear majors en meta-projects.
+- `.github/workflows/ci.yml`: el job único `validate` (que corría `make validate` secuencial) se divide en jobs independientes (`lock-check`, `lint`, `typecheck`, `test`, `docker-checks`, `audit-and-docs`, `trivy-fs`) que corren en paralelo, más `build` con `needs: [lint, test]` — así una PR muestra qué categoría falló sin leer el log completo. `make validate` no cambia (sigue siendo el comando único para hooks locales); los jobs de CI invocan los `pnpm`/scripts subyacentes por separado. Agrega `src/test/ci-workflow.test.ts` (parsea el YAML con `js-yaml`, nueva devDependency junto con `@types/js-yaml`) que verifica estructuralmente el grafo de jobs (issue #48).
 
 ### Fixed
 

@@ -3,7 +3,10 @@
   "compilerOptions": {
     /* Relaxed rigor for tests: unused mocks/doubles/params are common and not worth the friction. */
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    /* Node builtins (fs, path, process) used by infra-facing tests (e.g. ci-workflow.test.ts) —
+       explicit because TS 7's automatic @types inclusion isn't picking up @types/node under pnpm. */
+    "types": ["node"]
   },
   "include": ["src/test/**/*"],
   "exclude": ["node_modules", "dist"]
