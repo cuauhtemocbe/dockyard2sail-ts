@@ -21,7 +21,7 @@ RUN pnpm run typecheck && pnpm run build
 # stays on the floating tag — see practices reference). Refresh with:
 #   docker pull node:22-alpine && docker inspect --format='{{index .RepoDigests 0}}' node:22-alpine
 # Dependabot (.github/dependabot.yml, docker ecosystem) keeps this from going stale automatically.
-FROM node:26-alpine@sha256:e88a35be04478413b7c71c455cd9865de9b9360e1f43456be5951032d7ac1a66 AS production
+FROM node:26-alpine@sha256:aadf416b2cdce311a8811ba3f0608a61b77dbf997500e2eafe781b51f6a0b019 AS production
 
 RUN apk add --no-cache curl
 ENV NODE_ENV=production
