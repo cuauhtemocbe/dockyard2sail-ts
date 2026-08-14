@@ -31,7 +31,13 @@ ENV PORT=8080
 
 # corepack is no longer bundled with the Node image as of node:26 — install
 # pnpm directly via npm instead (works identically on every Node line).
-RUN npm install -g pnpm@9.0.0
+# Pinned well ahead of the builder stage's pnpm@9.0.0 (which tracks
+# packageManager for lockfile-resolution parity): this pnpm only ever runs
+# `pnpm add -g serve` and is discarded before the image ships, so it's pinned
+# purely to whatever version has zero known HIGH/CRITICAL CVEs in itself and
+# its bundled deps (tar, glob, minimatch, cross-spawn, ...) — verify with
+# `trivy image` after bumping (issue #56).
+RUN npm install -g pnpm@11.21.0
 
 # Create user without privileges
 RUN adduser -D -u 10001 nodeuser

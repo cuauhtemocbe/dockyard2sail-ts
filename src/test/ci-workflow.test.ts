@@ -47,3 +47,40 @@ describe("CI workflow job graph", () => {
     expect(needs).toEqual(expect.arrayContaining(["lint", "test"]));
   });
 });
+
+describe("CI workflow docker-image job", () => {
+  it("defines a docker-image job", () => {
+    expect(workflow.jobs).toHaveProperty("docker-image");
+  });
+
+  it("depends on lint and test", () => {
+    const needs = needsList(workflow.jobs["docker-image"]);
+
+    expect(needs).toEqual(expect.arrayContaining(["lint", "test"]));
+  });
+
+  it("is gated to a push on main", () => {
+    const condition = workflow.jobs["docker-image"]?.if;
+
+    expect(condition).toEqual(expect.stringContaining("github.event_name == 'push'"));
+    expect(condition).toEqual(expect.stringContaining("refs/heads/main"));
+  });
+
+  it("builds the production image and runs a Trivy image scan", () => {
+    const steps = workflow.jobs["docker-image"]?.steps as
+      | Array<Record<string, unknown>>
+      | undefined;
+    expect(steps).toBeDefined();
+
+    const buildStep = steps?.find(
+      (step) => typeof step.run === "string" && step.run.includes("docker build"),
+    );
+    expect(buildStep).toBeDefined();
+
+    const scanStep = steps?.find(
+      (step) => typeof step.uses === "string" && step.uses.startsWith("aquasecurity/trivy-action@"),
+    );
+    expect(scanStep).toBeDefined();
+    expect((scanStep?.with as Record<string, unknown> | undefined)?.["scan-type"]).toBe("image");
+  });
+});

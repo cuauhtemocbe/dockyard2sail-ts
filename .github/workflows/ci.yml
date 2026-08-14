@@ -172,6 +172,34 @@ jobs:
       - name: Documentation consistency checks
         run: ./scripts/check-docs.sh
 
+  docker-image:
+    name: Build and scan production Docker image
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [lint, test]
+    # Only on push to main: no registry push here, so a PR run would just
+    # rebuild+rescan an image that's discarded — the same gate `trivy-fs`
+    # would use if it were image-scoped instead of filesystem-scoped.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build production image
+        run: docker build -f Dockerfile -t dockyard2sail-ts:${{ github.sha }} .
+
+      # Image scan: same HIGH/CRITICAL fail-closed gate as trivy-fs, applied
+      # to the built production image instead of the filesystem. Accepted
+      # exceptions share the same .trivyignore.
+      - name: Trivy image scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: dockyard2sail-ts:${{ github.sha }}
+          scanners: vuln,secret,config
+          severity: HIGH,CRITICAL
+          exit-code: 1
+
   trivy-fs:
     name: Trivy filesystem scan
     runs-on: ubuntu-latest
