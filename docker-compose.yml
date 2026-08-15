@@ -18,7 +18,16 @@ services:
       - "5173:5173"
     environment:
       - NODE_ENV=development
-    user: node
+    # Root, not `node`: the bind mount (.:/app) keeps the *host* directory's
+    # ownership, and that owning UID varies by environment — it happens to
+    # match the container's `node` user (1000) on a typical single-user
+    # Linux dev box, but not on a GitHub Actions runner (actions/checkout
+    # writes as the runner user), where pnpm's non-root writes into /app
+    # then fail with EACCES. Root sidesteps the UID-matching problem
+    # entirely and is the documented exception for a dev container never
+    # reachable outside localhost (development-standards.md §1) — this one
+    # only ever runs Docker-first `make` targets via `docker compose exec`.
+    user: root
     stdin_open: true
     tty: true
     healthcheck:
