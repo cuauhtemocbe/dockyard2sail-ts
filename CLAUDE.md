@@ -118,7 +118,7 @@ El repo remoto es `cuauhtemocbe/dockyard2sail-ts` en GitHub. Usar el skill `/use
 
 ### Branch Protection (main)
 
-`main` tiene protección habilitada: sin force-push, sin borrado de la rama. `enforce_admins: false` — decisión deliberada, no descuido: el owner (único colaborador activo) puede seguir pusheando directo cuando hace sentido en un repo solo/bajo tráfico. Todavía no hay `required_status_checks`: el workflow de CI ya existe y reporta un status check (ver "CI/CD (GitHub Actions)" abajo), pero volverlo un check requerido es una decisión de settings de rama, separada y posterior a que el `ci.yml` llegue a `main`.
+`main` tiene protección habilitada: sin force-push, sin borrado de la rama. `enforce_admins: false` — decisión deliberada, no descuido: el owner (único colaborador activo) puede seguir pusheando directo cuando hace sentido en un repo solo/bajo tráfico. Desde issue #51, `required_status_checks` está configurado (`strict: false`) con los jobs de `ci.yml` que corren tanto en `push` como en `pull_request`: `Lockfile in sync`, `Lint`, `Type check`, `Test + coverage`, `Build`, `Docker port-binding checks`, `Dependency audit + doc consistency`, `Trivy filesystem scan`. Deliberadamente excluido: `Build and scan production Docker image` (job `docker-image`), gateado a `push`+`main` únicamente (ver "CI/CD (GitHub Actions)" abajo) — nunca corre en un PR, así que exigirlo dejaría todo PR unmergeable. Verificable con `gh api repos/cuauhtemocbe/dockyard2sail-ts/branches/main/protection`.
 
 ---
 
