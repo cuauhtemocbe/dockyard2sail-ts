@@ -18,9 +18,9 @@ if echo "$current_branch" | grep -qE "^($protected_branch)$"; then
     echo "✅ Pre-push validation passed"
 else
     echo "📝 Pushing to feature branch: $current_branch (basic checks only)"
-    
-    # Run basic type checking for feature branches
-    if ! pnpm run typecheck; then
+
+    # Run basic type checking for feature branches (via Docker, issue #53)
+    if ! make typecheck; then
         echo "❌ TypeScript type checking failed"
         exit 1
     fi

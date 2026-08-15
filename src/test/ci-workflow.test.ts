@@ -48,6 +48,44 @@ describe("CI workflow job graph", () => {
   });
 });
 
+function usesSetupTooling(job: WorkflowJob | undefined): boolean {
+  const steps = (job?.steps ?? []) as Array<Record<string, unknown>>;
+  return steps.some(
+    (step) =>
+      typeof step.uses === "string" &&
+      (step.uses.startsWith("actions/setup-node@") || step.uses.startsWith("pnpm/action-setup@")),
+  );
+}
+
+function runsMakeTarget(job: WorkflowJob | undefined): boolean {
+  const steps = (job?.steps ?? []) as Array<Record<string, unknown>>;
+  return steps.some((step) => typeof step.run === "string" && /(^|\n)\s*make\s+\S+/.test(step.run));
+}
+
+describe("CI workflow Docker-first validate jobs (issue #53)", () => {
+  const migratedJobs = ["lock-check", "lint", "typecheck", "test", "build", "audit-and-docs"];
+
+  it.each(migratedJobs)("%s does not use actions/setup-node or pnpm/action-setup", (jobName) => {
+    expect(usesSetupTooling(workflow.jobs[jobName])).toBe(false);
+  });
+
+  it.each(migratedJobs)("%s runs its check via a make target", (jobName) => {
+    expect(runsMakeTarget(workflow.jobs[jobName])).toBe(true);
+  });
+});
+
+describe("CI workflow jobs untouched by the Docker-first validate migration", () => {
+  const untouchedJobs = ["docker-checks", "trivy-fs", "docker-image"];
+
+  it.each(untouchedJobs)("%s does not use actions/setup-node or pnpm/action-setup", (jobName) => {
+    expect(usesSetupTooling(workflow.jobs[jobName])).toBe(false);
+  });
+
+  it.each(untouchedJobs)("%s does not run a make target", (jobName) => {
+    expect(runsMakeTarget(workflow.jobs[jobName])).toBe(false);
+  });
+});
+
 describe("CI workflow docker-image job", () => {
   it("defines a docker-image job", () => {
     expect(workflow.jobs).toHaveProperty("docker-image");

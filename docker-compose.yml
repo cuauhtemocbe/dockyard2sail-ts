@@ -7,6 +7,11 @@ services:
     volumes:
       - .:/app
       - pnpm-store:/home/node/.pnpm-store
+      # Shadows the bind mount's node_modules subpath so installed packages
+      # stay container-only: avoids native-binary mismatches when the host
+      # OS/arch differs from this Linux image, and keeps the host free of
+      # Node artifacts (the whole point of running pnpm install in Docker).
+      - node_modules:/app/node_modules
     working_dir: /app
     command: sleep infinity
     ports:
@@ -32,3 +37,4 @@ services:
 
 volumes:
   pnpm-store:
+  node_modules:

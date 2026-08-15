@@ -17,9 +17,9 @@ if [ "$current_branch" = "main" ]; then
     echo "✅ Pre-merge validation passed"
 else
     echo "📝 Running basic checks on feature branch merge..."
-    
-    # Run type checking only for feature branches
-    if ! pnpm run typecheck; then
+
+    # Run type checking only for feature branches (via Docker, issue #53)
+    if ! make typecheck; then
         echo "❌ TypeScript type checking failed"
         exit 1
     fi
