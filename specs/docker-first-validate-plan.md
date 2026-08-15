@@ -76,6 +76,9 @@ None new — no new packages, no changes to `Dockerfile.dev`.
 - GitHub-hosted `ubuntu-latest` runners have `docker compose` (v2 plugin) preinstalled — true as of current runner images; first CI run of the migrated jobs is the actual check.
 - The existing `pnpm-store` named volume in `docker-compose.yml` needs no changes — `docker compose exec` reuses the same running container/volumes already used for interactive dev.
 
+### Post-first-CI-run correction
+The first real CI run (PR #60) caught a design gap this plan missed: each `lint`/`typecheck`/`test`/`build`/`audit`/`check-docs` target originally depended only on `up-d`, not on `lock-check`. Locally that's invisible — the same container/volume persists across separate `make` invocations, so running `make validate` (or even just `make lint` after any prior target) always found `node_modules` already populated. In CI, each job is a fresh runner with its own fresh named volume — nothing had installed dependencies before `pnpm lint`/`pnpm test:coverage` ran, so every migrated job except `audit-and-docs`/`lock-check` failed with `sh: vitest: not found` (or the lint/tsc equivalent). Fix: `lint`, `typecheck`, `test`, `build`, `audit`, `check-docs` now depend on `lock-check` (not `up-d` directly) so each is self-sufficient regardless of invocation order or fresh state — verified locally by tearing down all volumes and running `make lint` standalone.
+
 ## Milestones
 
 - [ ] Milestone 1: `docker-compose.yml` + `Makefile` updated; `make validate` runs successfully end-to-end on this machine with Node/pnpm shadowed off `$PATH` (matches the issue's DoD wording: "verified in a clean environment with Docker but no Node/pnpm installed on the host"), and `node_modules` no longer appears on the host

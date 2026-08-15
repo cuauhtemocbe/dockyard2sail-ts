@@ -16,23 +16,23 @@ lock-check: up-d ## Verificar que pnpm-lock.yaml está sincronizado con package.
 	docker compose exec app pnpm install --frozen-lockfile
 	@echo "✅ Lockfile in sync"
 
-lint: up-d ## Lint con Biome (corre en Docker)
+lint: lock-check ## Lint con Biome (corre en Docker)
 	docker compose exec app pnpm lint
 
-typecheck: up-d ## Type check con tsc (corre en Docker)
+typecheck: lock-check ## Type check con tsc (corre en Docker)
 	docker compose exec app pnpm run typecheck
 
-test: up-d ## Tests con cobertura (corre en Docker)
+test: lock-check ## Tests con cobertura (corre en Docker)
 	docker compose exec app pnpm test:coverage
 
-build: up-d ## Build de producción + verificación de dist/ (corre en Docker)
+build: lock-check ## Build de producción + verificación de dist/ (corre en Docker)
 	docker compose exec app pnpm run build
 	@test -d dist && [ -n "$$(ls -A dist)" ] || (echo "❌ Build output directory is empty or missing" && exit 1)
 
-audit: up-d ## Auditoría de dependencias pnpm (corre en Docker)
+audit: lock-check ## Auditoría de dependencias pnpm (corre en Docker)
 	docker compose exec app pnpm audit --audit-level moderate || echo "⚠️  Security audit found issues (continuing...)"
 
-check-docs: up-d ## Verificar CHANGELOG.md en sync con package.json y excepciones documentadas en CLAUDE.md (corre en Docker)
+check-docs: lock-check ## Verificar CHANGELOG.md en sync con package.json y excepciones documentadas en CLAUDE.md (corre en Docker)
 	docker compose exec app ./scripts/check-docs.sh
 
 check-docker-cmd-shell-form: ## Chequeo estático (grep, sin build) de que CMD/HEALTHCHECK de producción en Dockerfile sigan en shell form con $PORT — corre en el host, no necesita Node/pnpm
