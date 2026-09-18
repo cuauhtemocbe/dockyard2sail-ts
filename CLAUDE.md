@@ -104,7 +104,8 @@ make validate       # lock-check + typecheck + test:coverage + build + docker po
 - **`pre-commit`**: corre **gitleaks** (secret scanning sobre el staged diff, ver `.husky/pre-commit` y `.gitleaksignore`) y nada más — deliberadamente rápido, el resto de las validaciones no corren acá.
   - Requiere `gitleaks` instalado en el host (no corre en Docker): [instalación](https://github.com/gitleaks/gitleaks#installing). Si no está instalado, el hook avisa y continúa (no bloquea el commit) — instalarlo es responsabilidad de cada dev.
   - Falsos positivos documentados y justificados van a `.gitleaksignore` (fingerprint por línea), nunca se ignora silenciosamente.
-- **`pre-push`**:
+- **`pre-push`**: primero corre un escaneo **Trivy fail-closed** en **cada push, a cualquier rama** (`trivy fs . --scanners vuln --severity CRITICAL --exit-code 1 --ignore-unfixed --quiet`) — bloquea el push ante cualquier CVE CRITICAL con fix disponible, en cualquier ecosistema. Si `trivy` no está en el `PATH`, el hook falla (no continúa como `pre-commit` con gitleaks) y apunta a `.claude/skills/trivy-scan/setup.md`. Después de ese escaneo, aplica el split de abajo (ver `specs/trivy-pre-push-cve-gate.md`, refs cuauhtemocbe/meta-projects#41):
+  - Requiere `trivy` instalado en el host (no corre en Docker) — ver `.claude/skills/trivy-scan/setup.md`; instalarlo es responsabilidad de cada dev
   - A `main`/`develop`: corre `make validate` completo (lock-check + typecheck + test:coverage + build + docker port checks + `pnpm audit` + check-docs), Docker-first (issue #53) — sin Node/pnpm en el host
   - A otras ramas: solo `make typecheck` (también vía Docker)
 - **`pre-merge-commit`**: mismo split — `make validate` completo a `main`, `make typecheck` en el resto
