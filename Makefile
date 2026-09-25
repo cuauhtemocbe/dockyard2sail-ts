@@ -9,7 +9,13 @@ up: ## Levantar el entorno de desarrollo en foreground (logs visibles, Ctrl+C de
 	docker compose up --build
 
 up-d: ## Levantar el entorno de desarrollo en background, esperando el healthcheck (dependencia de los demás targets)
-	docker compose up -d --build --wait
+	# --force-recreate: sin esto, un `up -d --build` sobre un contenedor ya
+	# existente puede reaplicar mal el volumen nombrado de node_modules (queda
+	# apuntando al bind mount del host en vez del volumen), silenciosamente
+	# filtrando node_modules/.pnpm-store de vuelta al host — verificado
+	# reproducible en este entorno Docker. Recrear siempre es la forma
+	# confiable de garantizar que el mount quede como se declaró.
+	docker compose up -d --build --wait --force-recreate
 
 lock-check: up-d ## Verificar que pnpm-lock.yaml está sincronizado con package.json (corre en Docker)
 	@echo "🔒 Checking pnpm-lock.yaml sync..."

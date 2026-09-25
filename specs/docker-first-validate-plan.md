@@ -84,6 +84,9 @@ Two design gaps surfaced only once real CI jobs ran (not reproducible locally, s
 
 Both verified locally by tearing down all volumes/containers and running targets standalone (`make lint`, `make lock-check`) against a fresh state, then a full `make validate` re-run.
 
+### Post-merge correction (found after PR #60 landed)
+A third issue surfaced only through repeated local `docker compose down -v` / `up -d` cycling (not something either CI or a single first-time `git clone` → `make validate` run would trigger): a plain `docker compose up -d --build --wait` against an already-existing container intermittently re-applied the `node_modules` named volume incorrectly, silently falling back to the bind mount for that subpath — verified with `stat -c '%d:%i'` showing the container's `/app/node_modules` and the host's `node_modules` sharing the same device+inode (i.e., the exact same directory, not a separate volume). `make validate`'s own internal chain calls `up-d` up to 6 times per run (once per sub-target), so this was reachable from normal use, not just adversarial testing. Fix: `up-d` now passes `--force-recreate`, verified stable across repeated consecutive invocations (container and host inodes stayed distinct) and a full clean-slate `make validate` run. A harmless side effect can still appear: an *empty* `node_modules` placeholder directory occasionally left on the host by the bind-mount/volume-mount transition during container recreation — confirmed empty (no real package content), safe to `rmdir`, unrelated to the content-leak bug this fix addresses.
+
 ## Milestones
 
 - [ ] Milestone 1: `docker-compose.yml` + `Makefile` updated; `make validate` runs successfully end-to-end on this machine with Node/pnpm shadowed off `$PATH` (matches the issue's DoD wording: "verified in a clean environment with Docker but no Node/pnpm installed on the host"), and `node_modules` no longer appears on the host
