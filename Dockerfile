@@ -21,7 +21,7 @@ RUN pnpm run typecheck && pnpm run build
 # stays on the floating tag — see practices reference). Refresh with:
 #   docker pull node:22-alpine && docker inspect --format='{{index .RepoDigests 0}}' node:22-alpine
 # Dependabot (.github/dependabot.yml, docker ecosystem) keeps this from going stale automatically.
-FROM node:26-alpine@sha256:aadf416b2cdce311a8811ba3f0608a61b77dbf997500e2eafe781b51f6a0b019 AS production
+FROM node:26-alpine@sha256:0b36e8c136b94cd4fcf02188228e76c31ad5872eef3fec8cbd2eee500cfd9e80 AS production
 
 RUN apk add --no-cache curl
 ENV NODE_ENV=production
@@ -50,10 +50,12 @@ COPY --from=builder --chown=nodeuser:nodeuser /app/dist ./dist
 # Install a simple HTTP server
 RUN pnpm add -g serve
 
-# Remove npm/npx — the base image bundles them, but this project uses pnpm
-# exclusively and nothing at runtime (serve, a standalone pnpm-installed
-# binary) shells out to them. Less attack surface, fewer bundled CVEs.
-RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
+# Remove npm/npx and the throwaway pnpm — the base image bundles npm, and pnpm
+# was only needed to install `serve` above (a standalone binary under
+# PNPM_HOME that shells out to neither). Both carry their own vendored deps
+# (undici, tar, ...) that Trivy flags, so drop them instead of shipping them.
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx \
+    /usr/local/lib/node_modules/pnpm /usr/local/bin/pnpm /usr/local/bin/pnpx
 
 USER nodeuser
 
