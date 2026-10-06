@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Secret scanning runs on every commit (fast, unlike the full validation suite below)
+# Secret scanning runs on every commit (fast, unlike the full validation suite below).
+# Fail closed: CI does not run gitleaks, so this hook is the only secret scan.
 if command -v gitleaks >/dev/null 2>&1; then
   gitleaks protect --staged --no-banner --redact
   if [ $? -ne 0 ]; then
@@ -8,7 +9,8 @@ if command -v gitleaks >/dev/null 2>&1; then
     exit 1
   fi
 else
-  echo "⚠️  gitleaks not installed — skipping secret scan (install: https://github.com/gitleaks/gitleaks#installing)"
+  echo "❌ gitleaks not installed — commit blocked (install: https://github.com/gitleaks/gitleaks#installing)" >&2
+  exit 1
 fi
 
 # Lint/format staged files (fast — only touches what's staged, unlike the
