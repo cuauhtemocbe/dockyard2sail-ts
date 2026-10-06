@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Secret scanning runs on every commit (fast, unlike the full validation suite below).
-# Fail closed: CI does not run gitleaks, so this hook is the only secret scan.
+# Fail closed: CI does not run gitleaks, so this hook is the only gitleaks scan.
 if command -v gitleaks >/dev/null 2>&1; then
   gitleaks protect --staged --no-banner --redact
   if [ $? -ne 0 ]; then
