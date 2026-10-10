@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help up up-d lock-check lint typecheck test build audit check-docs check-docker-cmd-shell-form docker-port-smoke-test validate
+.PHONY: help up up-d lock-check lint lint-staged typecheck test build audit check-docs check-docker-cmd-shell-form docker-port-smoke-test validate
 
 help: ## Mostrar esta ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -40,6 +40,21 @@ audit: lock-check ## Auditoría de dependencias pnpm (corre en Docker)
 
 check-docs: lock-check ## Verificar CHANGELOG.md en sync con package.json y excepciones documentadas en CLAUDE.md (corre en Docker)
 	docker compose exec app ./scripts/check-docs.sh
+
+# Lo llama el hook pre-commit (issue #86). Comentarios fuera de la receta para
+# que make no los imprima en cada commit.
+#
+# No depende de up-d: su --build --force-recreate es demasiado lento para correr
+# en cada commit. `up -d --wait` solo arranca el contenedor si no está corriendo.
+#
+# El exec va con el UID del host, no root (a diferencia del resto de los targets,
+# que no tocan .git): como root, git rechaza /app por "dubious ownership" y
+# lint-staged dejaría objetos root-owned en el .git del host. HOME=/tmp porque
+# ese UID puede no tener home en la imagen. -T porque un git hook no tiene TTY.
+# Si el volumen de node_modules está vacío (primera vez), correr `make lock-check`.
+lint-staged: ## Lint/format de los archivos staged dentro del contenedor, con el UID del host (lo usa el hook pre-commit)
+	docker compose up -d --wait
+	docker compose exec -T --user "$$(id -u):$$(id -g)" -e HOME=/tmp app pnpm exec lint-staged
 
 check-docker-cmd-shell-form: ## Chequeo estático (grep, sin build) de que CMD/HEALTHCHECK de producción en Dockerfile sigan en shell form con $PORT — corre en el host, no necesita Node/pnpm
 	./scripts/check-docker-cmd-shell-form.sh

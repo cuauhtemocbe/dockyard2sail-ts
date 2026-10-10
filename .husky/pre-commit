@@ -13,11 +13,13 @@ else
   exit 1
 fi
 
-# Lint/format staged files (fast — only touches what's staged, unlike the
-# full validation suite which runs on merge/push instead)
-pnpm exec lint-staged
+# Lint/format staged files + project-wide typecheck, inside the dev container
+# via make (issue #86) — the host needs no Node tooling, like every other
+# Docker-first target. Build is not run here: it runs in `make validate` and CI.
+make lint-staged
 if [ $? -ne 0 ]; then
-  echo "❌ lint-staged found issues in staged files — commit blocked"
+  echo "❌ lint-staged failed (issues in staged files, or the container could not start) — commit blocked"
+  echo "   First time, or empty dependency volume: run 'make lock-check'. Host port 5173 taken: set DEV_PORT."
   exit 1
 fi
 
