@@ -333,8 +333,9 @@ This boilerplate is available under the MIT License. See the LICENSE file for mo
 **Port conflicts:**
 
 - Default dev server runs on port 5173
-- Change port in `vite.config.ts` if needed
-- Update `docker-compose.yml` port mapping accordingly
+- If another project already holds 5173 on the host (`Bind for 0.0.0.0:5173 failed: port is already allocated`), set `DEV_PORT` to a free port in your shell or in `.env` (e.g. `DEV_PORT=5174`) — the dev container then publishes on that port, and `make` targets and the `pre-push` hook pick it up
+- Without `DEV_PORT` the host port stays 5173
+- The container-side port is set in `vite.config.ts` (`server.port`); change it there only if you also change the right-hand side of the mapping in `docker-compose.yml`
 
 ---
 
