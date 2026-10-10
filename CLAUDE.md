@@ -50,6 +50,7 @@ make help          # lista los targets con su descripción
 make up-d           # levanta el contenedor de dev en background, esperando el healthcheck
 make lock-check     # pnpm install --frozen-lockfile (vía docker compose exec) — falla si pnpm-lock.yaml no está en sync con package.json
 make check-docs     # scripts/check-docs.sh (vía docker compose exec) — versión de CHANGELOG.md en sync + excepciones de CLAUDE.md
+make lint-staged    # lint-staged dentro del contenedor, con el UID del host (lo llama el hook pre-commit, issue #86)
 make validate       # lock-check + typecheck + test:coverage + build + docker port checks + pnpm audit + check-docs
 ```
 
@@ -101,7 +102,9 @@ make validate       # lock-check + typecheck + test:coverage + build + docker po
 
 ## Git Hooks (Husky)
 
-- **`pre-commit`**: corre **gitleaks** (secret scanning sobre el staged diff, ver `.husky/pre-commit` y `.gitleaksignore`) y nada más — deliberadamente rápido, el resto de las validaciones no corren acá.
+- **`pre-commit`**: corre **gitleaks** (secret scanning sobre el staged diff, ver `.husky/pre-commit` y `.gitleaksignore`) y después `make lint-staged` (issue #86): Biome sobre los archivos staged + typecheck de todo el proyecto, **dentro del contenedor**. Deliberadamente rápido: el build y el resto de las validaciones no corren acá (build corre en `make validate` y CI).
+  - **`make lint-staged`** hace `docker compose up -d --wait` (sin `--build`/`--force-recreate`, y no depende de `up-d`: sería demasiado lento en cada commit) y `docker compose exec -T --user "$(id -u):$(id -g)" ... pnpm exec lint-staged`. Corre con el **UID del host, no root**: como root, git rechaza `/app` por "dubious ownership" y lint-staged dejaría objetos root-owned en el `.git` del host. El contenedor sigue como `root` para todo lo demás (CI, `pnpm install`). El host no necesita Node/pnpm para commitear.
+  - El `build` salió del commit por dos razones: `vite build` falla como no-root en el contenedor (`EACCES` en `node_modules/.vite-temp`, el volumen nombrado de `node_modules` es de root) y vaciaría el `dist/` escrito por root. Primera vez o volumen de dependencias vacío: correr `make lock-check`. Si el 5173 del host está ocupado, definir `DEV_PORT` (ver "Docker"). Limitación: un git worktree enlazado no funciona (su `.git` es un archivo con ruta absoluta del host, inexistente en el contenedor).
   - Requiere `gitleaks` instalado en el host (no corre en Docker): [instalación](https://github.com/gitleaks/gitleaks#installing). Si no está instalado, el hook **bloquea el commit** con un mensaje de instalación: el CI no corre gitleaks, así que este hook es el único escaneo con gitleaks y no se salta en silencio (GitHub secret scanning con push protection corre aparte en el servidor, pero cubre un conjunto más limitado de tipos de secreto). Instalarlo es responsabilidad de cada dev.
   - Falsos positivos documentados y justificados van a `.gitleaksignore` (fingerprint por línea), nunca se ignora silenciosamente.
 - **`pre-push`**: primero corre un escaneo **Trivy fail-closed** en **cada push, a cualquier rama** (`trivy fs . --scanners vuln --severity CRITICAL --exit-code 1 --ignore-unfixed --quiet`) — bloquea el push ante cualquier CVE CRITICAL con fix disponible, en cualquier ecosistema. Si `trivy` no está en el `PATH`, el hook falla (no continúa como `pre-commit` con gitleaks) y apunta a `.claude/skills/trivy-scan/setup.md`. Después de ese escaneo, aplica el split de abajo (ver `specs/trivy-pre-push-cve-gate.md`, refs cuauhtemocbe/meta-projects#41):
