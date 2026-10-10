@@ -309,7 +309,7 @@ Usar el skill `/sonar-check` para validar métricas de calidad de código:
 - Coverage: objetivo >= 80%
 - Duplication: < 3%
 
-**MCP**: el servidor SonarQube está configurado en `.mcp.json` (vía Docker, `mcp/sonarqube`). Si no está disponible, el skill hace fallback a Docker + `sonar-scanner` CLI.
+**MCP**: el servidor SonarQube está configurado en `.mcp.json` (vía `scripts/sonarqube-mcp.sh` de meta-projects, imagen `sonarsource/sonarqube-mcp`). Si no está disponible, el skill hace fallback a Docker + `sonar-scanner` CLI.
 
 **Nota**: `.mcp.json` nunca estuvo trackeado en git (está en `.gitignore` desde siempre, `git log --all -- .mcp.json` no devuelve nada) — el token de SonarQube que contiene es local a la máquina de cada dev, no está expuesto en el historial del repo. Mantenerlo gitignored es suficiente; no hace falta rotarlo salvo sospecha concreta de compromiso.
 
