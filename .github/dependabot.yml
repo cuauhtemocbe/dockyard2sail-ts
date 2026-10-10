@@ -7,6 +7,13 @@ updates:
     cooldown:
       default-days: 7
     groups:
+      # Declared before minor-and-patch on purpose: Dependabot assigns a
+      # dependency to the first group it matches, so vitest/@vitest/* always
+      # land here — including majors — and move together. They must share the
+      # same version (e.g. vitest 5 with @vitest/coverage-v8 4 crashes the
+      # coverage report), which separate per-package PRs can never satisfy.
+      vitest:
+        patterns: ["vitest", "@vitest/*"]
       minor-and-patch:
         update-types: ["minor", "patch"]
 
