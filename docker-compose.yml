@@ -15,9 +15,21 @@ services:
     working_dir: /app
     command: sleep infinity
     ports:
-      - "5173:5173"
+      # Host side is overridable (DEV_PORT, shell or .env) so another project
+      # already holding 5173 doesn't block `docker compose up` — and with it
+      # every Docker-first make target and the pre-push hook, since they all
+      # go through `up-d`. The container side stays 5173 (vite.config.ts).
+      - "${DEV_PORT:-5173}:5173"
     environment:
       - NODE_ENV=development
+      # Skip husky's `prepare` in the container: it runs as root against a
+      # bind mount owned by the host user, so git rejects /app ("dubious
+      # ownership") and husky logs a misleading `fatal: not in a git
+      # directory` on every install. Hooks are installed from the host. Not
+      # fixed with `safe.directory` on purpose: that would let husky succeed
+      # as root and rewrite the host's .git/config (core.hooksPath) and
+      # recreate .husky/_ owned by root.
+      - HUSKY=0
     # Root, not `node`: the bind mount (.:/app) keeps the *host* directory's
     # ownership, and that owning UID varies by environment — it happens to
     # match the container's `node` user (1000) on a typical single-user
