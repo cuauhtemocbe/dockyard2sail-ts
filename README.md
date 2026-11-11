@@ -153,13 +153,22 @@ docker build -t mi-app:latest .
 docker run -p 8080:8080 mi-app:latest
 ```
 
-### 🔒 Por qué la imagen de producción está pineada y la de dev no
+### 🔒 Una sola cadena pineada para dev y producción
 
-La imagen de producción (`Dockerfile`, stage `production`) está pineada por digest (`FROM node:26-alpine@sha256:...`) para builds reproducibles: el mismo digest siempre resuelve exactamente a los mismos bytes, sin sorpresas entre un build y el siguiente.
+Las tres líneas `FROM node:` del repo (stages `builder` y `production` de `Dockerfile`, y `Dockerfile.dev`) usan la misma cadena pineada por digest: `node:<tag>@sha256:<digest>`. Es una sola para todo el repo, para builds reproducibles: el mismo digest siempre resuelve exactamente a los mismos bytes, así que dev y producción corren el mismo Node, sin sorpresas entre un build y el siguiente. No hay asimetría entre dev y producción — no quitar el digest de `Dockerfile.dev` ni dejar que una línea `FROM node:` se aparte de las otras.
 
-La imagen de desarrollo (`Dockerfile.dev`) usa a propósito un tag flotante (`FROM node:26-alpine`, sin digest) — en desarrollo local pesa más recibir parches de seguridad automáticamente en cada rebuild que la reproducibilidad exacta.
+Para ver la cadena vigente: `grep -n '^FROM node:' Dockerfile Dockerfile.dev`.
 
-Esta asimetría es intencional, no un descuido — no "corregir" el pinning de `Dockerfile.dev` para que coincida con `Dockerfile`.
+**Cómo refrescarla** (por ejemplo, al subir de versión de Node):
+
+```bash
+docker pull node:<tag>
+docker inspect --format='{{index .RepoDigests 0}}' node:<tag>
+```
+
+`docker inspect` devuelve `node@sha256:<digest>`; la cadena nueva es `node:<tag>@sha256:<digest>`. Reemplazarla en las tres líneas `FROM node:` a la vez.
+
+**Dependabot** (ecosistema `docker` en `.github/dependabot.yml`) propone cada semana el bump de tag y digest, así que la cadena se mantiene al día sin refrescarla a mano. `make check-docs` falla si alguna línea `FROM node:` de `Dockerfile` o `Dockerfile.dev` pierde el digest o difiere de las demás, por lo que un bump parcial no pasa `make validate`.
 
 ---
 
