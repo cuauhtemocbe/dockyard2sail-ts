@@ -7,7 +7,7 @@
   "main": "dist/main.js",
   "packageManager": "pnpm@9.0.0",
   "engines": {
-    "node": ">=22.0.0",
+    "node": ">=26.12.1 <27",
     "pnpm": ">=9.0.0"
   },
   "scripts": {
