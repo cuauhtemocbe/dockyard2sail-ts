@@ -17,10 +17,11 @@ COPY . .
 RUN pnpm run typecheck && pnpm run build
 
 # ---------- Production ----------
-# Pinned by digest for byte-for-byte reproducible builds (Dockerfile.dev intentionally
-# stays on the floating tag — see practices reference). Refresh with:
-#   docker pull node:22-alpine && docker inspect --format='{{index .RepoDigests 0}}' node:22-alpine
-# Dependabot (.github/dependabot.yml, docker ecosystem) keeps this from going stale automatically.
+# Pinned by digest for byte-for-byte reproducible builds. Same single chain as the
+# builder stage above and Dockerfile.dev — no pinning asymmetry between dev and
+# production. Refresh the chain (and replace it in all three FROM lines) with:
+#   docker pull node:<tag> && docker inspect --format='{{index .RepoDigests 0}}' node:<tag>
+# Dependabot (.github/dependabot.yml, docker ecosystem) keeps it from going stale automatically.
 FROM node:26.13.0-alpine3.24@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216 AS production
 
 RUN apk add --no-cache curl
