@@ -1,5 +1,5 @@
 # ---------- Builder ----------
-FROM node:26-alpine AS builder
+FROM node:26.13.0-alpine3.24@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216 AS builder
 
 RUN apk add --no-cache git
 ENV PNPM_HOME="/root/.local/share/pnpm"
@@ -21,7 +21,7 @@ RUN pnpm run typecheck && pnpm run build
 # stays on the floating tag — see practices reference). Refresh with:
 #   docker pull node:22-alpine && docker inspect --format='{{index .RepoDigests 0}}' node:22-alpine
 # Dependabot (.github/dependabot.yml, docker ecosystem) keeps this from going stale automatically.
-FROM node:26-alpine@sha256:0b36e8c136b94cd4fcf02188228e76c31ad5872eef3fec8cbd2eee500cfd9e80 AS production
+FROM node:26.13.0-alpine3.24@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216 AS production
 
 RUN apk add --no-cache curl
 ENV NODE_ENV=production
